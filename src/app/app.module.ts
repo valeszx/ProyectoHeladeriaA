@@ -4,18 +4,45 @@ import { HttpClientModule } from '@angular/common/http';  // Aquí se importa Ht
 import { AppComponent } from './app.component';
 import { ReactiveFormsModule } from '@angular/forms'; 
 import { LoginComponent } from '../prueba/login/login.component';
+import { RouterModule } from '@angular/router';
+import { routes } from './app.routes';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MenuComponent } from '../prueba/Menu/menu/menu.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { InicioComponent } from '../prueba/Inicio/inicio/inicio.component';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { ProductoComponent } from '../prueba/producto/producto.component';
+import { WelcomeComponent } from '../prueba/welcome/welcome.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
+    MenuComponent,
+    InicioComponent,
+    ProductoComponent,
+    WelcomeComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule  // Asegúrate de incluirlo en los imports
+    ,RouterModule.forRoot(routes)
+    ,MatToolbarModule
+    ,MatIconModule
+    ,MatMenuModule
+    ,MatButtonModule
+    ,MatSidenavModule,
+    MatToolbarModule,
+    MatListModule
   ],
-  providers: [],
+  providers: [
+    provideAnimationsAsync()
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,59 @@
+/* my-component.component.css */
+
+.sidenav-container {
+  /* Hacemos que ocupe el 100% de la altura de la ventana (para incluir el espacio superior) */
+  height: 100vh; 
+  /* Asegúrate de que el body/html no tenga margen extra para que 100vh funcione bien */
+}
+
+.toolbar-spacer{
+  cursor: pointer;
+}
+
+/* my-component.component.css */
+
+.transparent-toolbar {
+  position: absolute;
+  top: 0;
+  z-index: 10;
+  background: none;
+  color: #444; 
+  
+  display: flex; 
+  align-items: center; 
+  
+  /* Opcional: Eliminar todo el padding del toolbar si solo tienes el botón */
+  /* padding: 0 !important; */ 
+}
+
+
+
+/* ... el resto del CSS se mantiene igual ... */
+
+/* 1. Contenedor principal para la imagen de fondo */
+.welcome-background {
+  /* Debe seguir ocupando el 100% del espacio del sidenav-content */
+  height: 100%;
+  width: 100%;
+
+  background-image: url('/assets/Imagenes/Inventario.webp');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  /* IMPORTANTE: Añadimos un padding superior que sea igual a la altura del toolbar (típicamente 64px)
+     para que el texto de bienvenida NO se superponga al toolbar */
+  padding-top: 64px; 
+}
+
+.mdc-list {
+    margin: 0;
+    padding: 58px 0 !important;
+    list-style-type: none;
+}
+
+/* El resto de estilos (.welcome-text-overlay, h1, p) se mantienen igual. */

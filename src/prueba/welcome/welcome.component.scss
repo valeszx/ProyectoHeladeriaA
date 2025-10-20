@@ -1,0 +1,27 @@
+/* 1. Contenedor principal para la imagen de fondo */
+.welcome-background {
+  /* Debe seguir ocupando el 100% del espacio del sidenav-content */
+  height: 100%;
+  width: 100%;
+
+  background-image: url('/assets/Imagenes/Inventario.webp');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  /* IMPORTANTE: Añadimos un padding superior que sea igual a la altura del toolbar (típicamente 64px)
+     para que el texto de bienvenida NO se superponga al toolbar */
+  padding-top: 64px; 
+}
+
+.mdc-list {
+    margin: 0;
+    padding: 58px 0 !important;
+    list-style-type: none;
+}
+
+/* El resto de estilos (.welcome-text-overlay, h1, p) se mantienen igual. */
