@@ -16,7 +16,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { ProductoComponent } from '../prueba/producto/producto.component';
-import { WelcomeComponent } from '../prueba/welcome/welcome.component';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator'; // Opcional, pero recomendado
+import { MatSortModule } from '@angular/material/sort';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { WelcomeComponent } from '../prueba/Welcome/welcome/welcome.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +43,12 @@ import { WelcomeComponent } from '../prueba/welcome/welcome.component';
     ,MatButtonModule
     ,MatSidenavModule,
     MatToolbarModule,
-    MatListModule
+    MatListModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
+    MatInputModule,
+    MatFormFieldModule
   ],
   providers: [
     provideAnimationsAsync()

@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { InicioComponent } from '../prueba/Inicio/inicio/inicio.component';
 import { LoginComponent } from '../prueba/login/login.component';
 import { ProductoComponent } from '../prueba/producto/producto.component';
-import { WelcomeComponent } from '../prueba/welcome/welcome.component';
+import { WelcomeComponent } from '../prueba/Welcome/welcome/welcome.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,7 +18,7 @@ export const routes: Routes = [
             // Debes cambiar los routerLink en el menú para que usen esta ruta: ['/Inicio/Producto']
            
         ]
+         
     },
-
 
 ];

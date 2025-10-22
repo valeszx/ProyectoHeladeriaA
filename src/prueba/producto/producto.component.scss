@@ -1,0 +1,115 @@
+$primary-color: #007bff; // Color azul oscuro similar al botón 'Agregar'
+$green-accent: #28a745; // Color verde de los iconos 'Actualizar' y 'Filtrar'
+$hover-color: #f5f5f5; // Color gris claro para hover
+
+// --- HEADER PRINCIPAL ---
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+
+    .page-title {
+        font-size: 24px;
+        font-weight: 500;
+        color: #333;
+        margin: 0;
+    }
+
+    .btn-agregar {
+        background-color: $primary-color;
+        color: white;
+        font-weight: 600;
+        padding: 8px 25px;
+        line-height: 1.5;
+        height: auto;
+    }
+}
+
+// --- BARRA DE ACCIONES Y BÚSQUEDA ---
+.search-actions-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .actions-left {
+        display: flex;
+        gap: 15px; // Espacio entre los botones 'Actualizar' y 'Filtrar'
+
+        .action-button {
+            color: $green-accent; // Color verde para el texto y el icono
+            font-weight: 500;
+            padding: 0 5px;
+            
+            .mat-icon {
+                margin-right: 5px;
+            }
+        }
+    }
+
+    .search-field {
+        width: 300px; // Ancho fijo para el campo de búsqueda
+        .mat-form-field-wrapper {
+            padding-bottom: 0; // Elimina el padding extra
+        }
+    }
+}
+
+// --- TABLA DE DATOS ---
+.table-container {
+    width: 100%;
+    overflow: auto;
+    border-radius: 4px; // Bordes redondeados sutiles
+
+    .mat-table {
+        min-width: 1000px; // Asegura que la tabla no sea demasiado estrecha
+    }
+
+    .mat-header-cell {
+        color: #333;
+        font-weight: 600;
+        font-size: 14px;
+        border-bottom: 2px solid #ddd; // Línea más marcada para la cabecera
+    }
+
+    .mat-row {
+        height: 55px; // Altura cómoda para las filas
+        border-bottom: 1px solid #eee;
+        
+        &:hover {
+            background-color: $hover-color;
+            cursor: pointer;
+        }
+    }
+    
+    // Estilo para la fila seleccionada (azul claro)
+    .data-row:nth-child(4) { /* Usé nth-child(4) para replicar la fila azul de tu imagen */
+        background-color: #e6f7ff; 
+        
+        &:hover {
+            background-color: #cceeff; /* Un tono un poco más oscuro al pasar el mouse */
+        }
+    }
+
+    .dots-icon {
+        color: #777; // Color gris para los puntos suspensivos
+    }
+}
+
+// --- PAGINADOR ---
+mat-paginator {
+    background: transparent;
+    padding-top: 10px;
+    
+    // Estilo para la barra de progreso que actúa como separador
+    &:before {
+        content: "";
+        display: block;
+        height: 5px;
+        background-color: $primary-color;
+        width: 30%; /* Ancho similar al de la imagen */
+    }
+}
