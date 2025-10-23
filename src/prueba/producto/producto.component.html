@@ -1,9 +1,10 @@
 <div class="header-container">
     <h1 class="page-title">Productos</h1>
-    <button mat-flat-button color="primary" class="btn-agregar" *ngIf="PuedeVer">
+</div>
+
+ <button mat-flat-button color="primary" (click)="agregarProducto()"  *ngIf="PuedeVer">
         Agregar
     </button>
-</div>
 
 <div class="mat-elevation-z2 table-container">
     <table mat-table [dataSource]="dataSource">
@@ -42,3 +43,47 @@
 </div>
 
 <mat-paginator [pageSizeOptions]="[4, 10, 25]" showFirstLastButtons></mat-paginator>
+
+<h2 class="modal-title" *ngIf="Modal">Agregar Nuevo Producto</h2>
+
+<div class="modal-overlay" (click)="cancelar()" *ngIf="Modal">
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
+        
+        <div class="modal-header">
+            <h2 class="modal-title">Agregar Nuevo Producto</h2>
+        </div>
+
+        <div class="modal-content">
+           <form [formGroup]="formulario">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" formControlName="nombre" required>
+                    <span class="error-msg" *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">El nombre es obligatorio.</span>
+                </div>
+                
+                <div class="form-group">
+                    <label>Descripción</label>
+                    <textarea formControlName="descripcion"></textarea>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label>Cantidad</label>
+                    <input type="number" formControlName="cantidad" required min="1">
+                    <span class="error-msg" *ngIf="formulario.get('cantidad')?.invalid && formulario.get('cantidad')?.touched">La cantidad es obligatorio.</span>
+                </div>
+                
+                <div class="form-group half-width">
+                    <label>Precio</label>
+                    <input type="number" formControlName="precio" required step="0.01" min="0.01">
+                    <span class="error-msg" *ngIf="formulario.get('precio')?.invalid && formulario.get('precio')?.touched">El precio es obligatorio.</span>
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
+            <button class="btn btn-primary" [disabled]="formulario.invalid" (click)="guardar()">Guardar</button>
+        </div>
+
+    </div>
+</div>

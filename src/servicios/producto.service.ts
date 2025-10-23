@@ -14,4 +14,8 @@ export class ProductoService {
     ObtenerProductos(): Observable<any> {
       return this.http.get<any>(`${this.apiUrl}`);
     }
+
+    AgregarProducto(producto: any): Observable<any> {
+      return this.http.post<any>(`${this.apiUrl}`, producto);
+    }
 }
