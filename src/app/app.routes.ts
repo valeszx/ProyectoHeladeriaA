@@ -8,12 +8,12 @@ export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: LoginComponent },
     {
-        path: 'Inicio', component: InicioComponent, children: [
+        path: 'inicio/:id', component: InicioComponent, children: [
             // Cuando la URL es /Inicio, muestra el componente de bienvenida
             { path: '', component: WelcomeComponent },
 
             // Cuando la URL es /Inicio/Producto, muestra el ProductoComponent
-            { path: 'Producto', component: ProductoComponent },
+            { path: 'Producto/:id', component: ProductoComponent },
 
             // Debes cambiar los routerLink en el menú para que usen esta ruta: ['/Inicio/Producto']
            

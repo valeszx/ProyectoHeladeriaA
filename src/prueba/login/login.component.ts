@@ -23,14 +23,25 @@ export class LoginComponent {
 
   Ingresar() {
     let data = this.formulario.value;
-    this.loginService.ValidarUsuario(data.usuario, data.password).subscribe({
-      next: (result) => {
-        if(!result){
-          this.ModalError();
-        }
-        else{
-          this.route.navigate(['Inicio']);
-        }
+
+
+    this.loginService.ObtenerUsuario(data.usuario).subscribe({
+      next: (login) => {
+        
+        this.loginService.ValidarUsuario(data.usuario, data.password).subscribe({
+          next: (result) => {
+            if (!result) {
+              this.ModalError();
+            }
+            else {
+              var id = login.id;
+              this.route.navigate(['inicio',id]);
+            }
+          },
+          error: (err) => {
+            console.log(err);
+          }
+        });
       },
       error: (err) => {
         console.log(err);

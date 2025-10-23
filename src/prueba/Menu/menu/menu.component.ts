@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 // Importa el módulo específico para el toolbar
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
@@ -9,5 +9,5 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
-
+@Input()id!: string
 }

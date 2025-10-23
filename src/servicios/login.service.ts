@@ -14,4 +14,9 @@ export class LoginService {
   ValidarUsuario(usuario:string, password:string): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/${usuario}/${password}/validar`);
   }
+
+   // Método para hacer una solicitud GET
+  ObtenerUsuario(usuario:string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/${usuario}/obtenerUsuario`);
+  }
 }

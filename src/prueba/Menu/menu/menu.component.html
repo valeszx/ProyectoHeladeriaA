@@ -11,7 +11,7 @@
 
     <mat-sidenav #sidenav mode="side" opened>
         <mat-nav-list>
-            <a mat-list-item routerLink="Producto">
+            <a mat-list-item [routerLink]="['Producto',id]">
                 <mat-icon>inventory_2</mat-icon> Producto
             </a>
             <a mat-list-item routerLink="/categorias">
