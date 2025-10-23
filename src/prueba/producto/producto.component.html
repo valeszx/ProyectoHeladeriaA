@@ -64,6 +64,7 @@
                 <div class="form-group">
                     <label>Descripción</label>
                     <textarea formControlName="descripcion"></textarea>
+                    <span class="error-msg" *ngIf="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched">La descripcion es obligatorio.</span>
                 </div>
                 
                 <div class="form-group half-width">
