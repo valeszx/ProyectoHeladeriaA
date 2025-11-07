@@ -228,3 +228,8 @@ mat-paginator {
     font-size: 0.85em; /* Un poco más pequeño que el texto normal */
     margin-top: 5px; /* Espacio entre el campo y el mensaje */
 }
+
+.centered {
+  text-align: center;
+  width: 56px; /* da un ancho cómodo a cada columna de icono */
+}

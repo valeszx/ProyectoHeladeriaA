@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 export interface Producto {
+  id:number;
   nombre: string;
   descripcion: string;
   cantidad: string;
@@ -22,12 +23,14 @@ export interface Producto {
 export class ProductoComponent {
   // La primera columna invisible para los puntos suspensivos (menú de acciones)
   SOLICITUDES_DATA: Producto[] = [];
-  displayedColumns: string[] = ['Nombre', 'Descripcion', 'Cantidad', 'Precio'];
+  displayedColumns: string[] = ['Nombre', 'Descripcion', 'Cantidad', 'Precio', 'Editar', 'Eliminar'];
   PuedeVer: boolean = false;
   @Input() id!: string
   formulario!: FormGroup;
+  idProductoEditar:number =0;
   Modal: boolean = false;
-  AddProducto!:Producto;
+  AddProducto!: Producto;
+  titulo: string = 'Agregar Nuevo Producto'
 
   dataSource = new MatTableDataSource<Producto>();
 
@@ -57,6 +60,7 @@ export class ProductoComponent {
     this.productoService.ObtenerProductos().subscribe({
       next: (data) => {
         var productos = data.map((item: any) => ({
+          id: item.id,
           nombre: item.nombre,
           descripcion: item.descripcion,
           cantidad: item.cantidad,
@@ -93,27 +97,66 @@ export class ProductoComponent {
 
     var forms = this.formulario.value;
 
-    this.AddProducto = {
-      nombre: forms.nombre,
-      descripcion: forms.descripcion,
-      cantidad: forms.cantidad,
-      precio: forms.precio
-    };
+      this.AddProducto = {
+        id :0,
+        nombre: forms.nombre,
+        descripcion: forms.descripcion,
+        cantidad: forms.cantidad,
+        precio: forms.precio
+      };
 
-    this.productoService.AgregarProducto(this.AddProducto).subscribe({
-      next: (data) => {
-       if(data){
-        this.Modal = false;
-        this.limpiarFormulario();
-        this.ngOnInit();
-       }
-      }
-    });
+    if (this.titulo == 'Agregar Nuevo Producto') {
+    
+      this.productoService.AgregarProducto(this.AddProducto).subscribe({
+        next: (data) => {
+          if (data) {
+            this.Modal = false;
+            this.limpiarFormulario();
+            this.ngOnInit();
+          }
+        }
+      });
+    }
+    else{
+
+      this.AddProducto = {
+        id :this.idProductoEditar,
+        nombre: forms.nombre,
+        descripcion: forms.descripcion,
+        cantidad: forms.cantidad,
+        precio: forms.precio
+      };
+      
+      this.productoService.ActualizarProducto(this.AddProducto).subscribe({
+        next: (data) => {
+          if (data) {
+            this.Modal = false;
+            this.limpiarFormulario();
+            this.ngOnInit();
+          }
+        }
+      });
+    }
+
   }
 
   //boton agregar producto levanta el modal
   agregarProducto() {
     this.Modal = true;
+    this.titulo = 'Agregar Nuevo Producto';
+  }
+
+  editarProducto(producto: any) {
+    this.Modal = true;
+    this.titulo = 'Editar producto';
+
+    this.idProductoEditar = producto.id;
+
+    this.formulario.patchValue({ 'nombre': producto.nombre })
+    this.formulario.patchValue({ 'descripcion': producto.descripcion })
+    this.formulario.patchValue({ 'cantidad': producto.cantidad })
+    this.formulario.patchValue({ 'precio': producto.precio })
+
   }
 
   //Cuando se guarda o cancela el modal se limpia el formulario

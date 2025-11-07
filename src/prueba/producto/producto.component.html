@@ -2,9 +2,9 @@
     <h1 class="page-title">Productos</h1>
 </div>
 
- <button mat-flat-button color="primary" (click)="agregarProducto()"  *ngIf="PuedeVer">
-        Agregar
-    </button>
+<button mat-flat-button color="primary" (click)="agregarProducto()" *ngIf="PuedeVer">
+    Agregar
+</button>
 
 <div class="mat-elevation-z2 table-container">
     <table mat-table [dataSource]="dataSource">
@@ -31,12 +31,34 @@
             <td mat-cell *matCellDef="let element"> {{element.cantidad}} </td>
         </ng-container>
 
-          <ng-container matColumnDef="Precio">
+        <ng-container matColumnDef="Precio">
             <th mat-header-cell *matHeaderCellDef> Precio </th>
             <td mat-cell *matCellDef="let element"> {{element.precio}} </td>
         </ng-container>
 
-       
+        <!-- NUEVO: Editar -->
+        <ng-container matColumnDef="Editar">
+            <th mat-header-cell *matHeaderCellDef class="centered"> </th>
+            <td mat-cell *matCellDef="let element" class="centered">
+                <button mat-icon-button color="primary" aria-label="Editar producto" matTooltip="Editar"
+                    (click)='editarProducto(element)'>
+                    <mat-icon>edit</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+        <!-- NUEVO: Eliminar -->
+        <ng-container matColumnDef="Eliminar">
+            <th mat-header-cell *matHeaderCellDef class="centered"> </th>
+            <td mat-cell *matCellDef="let element" class="centered">
+                <button mat-icon-button color="warn" aria-label="Eliminar producto" matTooltip="Eliminar"
+                    >
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </td>
+        </ng-container>
+
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="data-row"></tr>
     </table>
@@ -44,46 +66,54 @@
 
 <mat-paginator [pageSizeOptions]="[4, 10, 25]" showFirstLastButtons></mat-paginator>
 
-<h2 class="modal-title" *ngIf="Modal">Agregar Nuevo Producto</h2>
+<h2 class="modal-title" *ngIf="Modal">{{titulo}}</h2>
 
 <div class="modal-overlay" (click)="cancelar()" *ngIf="Modal">
     <div class="modal-dialog" (click)="$event.stopPropagation()">
-        
+
         <div class="modal-header">
-            <h2 class="modal-title">Agregar Nuevo Producto</h2>
+            <h2 class="modal-title">{{titulo}}</h2>
         </div>
 
         <div class="modal-content">
-           <form [formGroup]="formulario">
+            <form [formGroup]="formulario">
                 <div class="form-group">
                     <label>Nombre</label>
                     <input type="text" formControlName="nombre" required>
-                    <span class="error-msg" *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">El nombre es obligatorio.</span>
+                    <span class="error-msg"
+                        *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">El nombre es
+                        obligatorio.</span>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Descripción</label>
                     <textarea formControlName="descripcion"></textarea>
-                    <span class="error-msg" *ngIf="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched">La descripcion es obligatorio.</span>
+                    <span class="error-msg"
+                        *ngIf="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched">La
+                        descripcion es obligatorio.</span>
                 </div>
-                
+
                 <div class="form-group half-width">
                     <label>Cantidad</label>
                     <input type="number" formControlName="cantidad" required min="1">
-                    <span class="error-msg" *ngIf="formulario.get('cantidad')?.invalid && formulario.get('cantidad')?.touched">La cantidad es obligatorio.</span>
+                    <span class="error-msg"
+                        *ngIf="formulario.get('cantidad')?.invalid && formulario.get('cantidad')?.touched">La cantidad
+                        es obligatorio.</span>
                 </div>
-                
+
                 <div class="form-group half-width">
                     <label>Precio</label>
                     <input type="number" formControlName="precio" required step="0.01" min="0.01">
-                    <span class="error-msg" *ngIf="formulario.get('precio')?.invalid && formulario.get('precio')?.touched">El precio es obligatorio.</span>
+                    <span class="error-msg"
+                        *ngIf="formulario.get('precio')?.invalid && formulario.get('precio')?.touched">El precio es
+                        obligatorio.</span>
                 </div>
             </form>
         </div>
 
         <div class="modal-actions">
             <button class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
-            <button class="btn btn-primary" [disabled]="formulario.invalid" (click)="guardar()">Guardar</button>
+            <button class="btn btn-primary" [disabled]="formulario.invalid" (click)="guardar()">Agregar</button>
         </div>
 
     </div>

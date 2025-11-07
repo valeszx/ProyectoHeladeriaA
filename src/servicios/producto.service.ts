@@ -18,4 +18,8 @@ export class ProductoService {
     AgregarProducto(producto: any): Observable<any> {
       return this.http.post<any>(`${this.apiUrl}`, producto);
     }
+
+    ActualizarProducto(producto: any): Observable<any> {
+      return this.http.put<any>(`${this.apiUrl}`, producto);
+    }
 }
