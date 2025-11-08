@@ -29,8 +29,11 @@ export class ProductoComponent {
   formulario!: FormGroup;
   idProductoEditar:number =0;
   Modal: boolean = false;
+  ModalEliminar: boolean = false;
   AddProducto!: Producto;
   titulo: string = 'Agregar Nuevo Producto'
+  tituloEliminar: string = 'Eliminar Producto'
+  idProductoEliminar:number =0;
 
   dataSource = new MatTableDataSource<Producto>();
 
@@ -162,6 +165,27 @@ export class ProductoComponent {
   //Cuando se guarda o cancela el modal se limpia el formulario
   limpiarFormulario() {
     this.formulario.reset();
+  }
+
+  eliminar(){
+    this.productoService.EliminarProducto(this.idProductoEliminar).subscribe({
+        next: (data) => {
+          if (data) {
+            this.ModalEliminar = false;
+            this.limpiarFormulario();
+            this.ngOnInit();
+          }
+        }
+      });
+  }
+
+  EliminarProducto(producto: any){
+    this.idProductoEliminar = producto.id;
+    this.ModalEliminar = true;
+  }
+
+  CancelarEliminar(){
+    this.ModalEliminar = false;
   }
 
 }

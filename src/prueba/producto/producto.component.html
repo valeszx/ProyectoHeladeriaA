@@ -52,7 +52,7 @@
             <th mat-header-cell *matHeaderCellDef class="centered"> </th>
             <td mat-cell *matCellDef="let element" class="centered">
                 <button mat-icon-button color="warn" aria-label="Eliminar producto" matTooltip="Eliminar"
-                    >
+                    (click)="EliminarProducto(element)">
                     <mat-icon>delete</mat-icon>
                 </button>
             </td>
@@ -117,4 +117,23 @@
         </div>
 
     </div>
+</div>
+
+<div class="modal-overlay" (click)="cancelar()" *ngIf="ModalEliminar">
+  <div class="modal-dialog" (click)="$event.stopPropagation()">
+    
+    <div class="modal-header">
+      <h2 class="modal-title">{{tituloEliminar}}</h2>
+    </div>
+
+    <div class="modal-content">
+      <p>¿Desea eliminar el producto?</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-secondary" (click)="CancelarEliminar()">Cancelar</button>
+      <button class="btn btn-danger" (click)="eliminar()">Aceptar</button>
+    </div>
+    
+  </div>
 </div>
