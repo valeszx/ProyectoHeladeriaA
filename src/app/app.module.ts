@@ -22,6 +22,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { WelcomeComponent } from '../prueba/Welcome/welcome/welcome.component';
+import { CategoriaComponent } from '../prueba/categoria/categoria/categoria.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { WelcomeComponent } from '../prueba/Welcome/welcome/welcome.component';
     MenuComponent,
     InicioComponent,
     ProductoComponent,
-    WelcomeComponent
+    WelcomeComponent,
+    CategoriaComponent
   ],
   imports: [
     BrowserModule,

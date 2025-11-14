@@ -3,6 +3,7 @@ import { InicioComponent } from '../prueba/Inicio/inicio/inicio.component';
 import { LoginComponent } from '../prueba/login/login.component';
 import { ProductoComponent } from '../prueba/producto/producto.component';
 import { WelcomeComponent } from '../prueba/Welcome/welcome/welcome.component';
+import { CategoriaComponent } from '../prueba/categoria/categoria/categoria.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -14,6 +15,7 @@ export const routes: Routes = [
 
             // Cuando la URL es /Inicio/Producto, muestra el ProductoComponent
             { path: 'Producto/:id', component: ProductoComponent },
+            { path: 'Categoria/:id', component: CategoriaComponent },
 
             // Debes cambiar los routerLink en el menú para que usen esta ruta: ['/Inicio/Producto']
            
