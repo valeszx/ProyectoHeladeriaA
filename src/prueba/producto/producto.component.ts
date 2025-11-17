@@ -5,6 +5,7 @@ import { ProductoService } from '../../servicios/producto.service';
 import { PermisoService } from '../../servicios/permiso.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CategoriaService } from '../../servicios/categoria.service';
 
 export interface Producto {
   id:number;
@@ -12,6 +13,13 @@ export interface Producto {
   descripcion: string;
   cantidad: string;
   precio: number;
+  idCategoria?: number;
+  categorias?: Categoria[];
+}
+
+export interface Categoria {
+  id:number;
+  nombre?: string;
 }
 
 
@@ -34,13 +42,14 @@ export class ProductoComponent {
   titulo: string = 'Agregar Nuevo Producto'
   tituloEliminar: string = 'Eliminar Producto'
   idProductoEliminar:number =0;
+  categorias: any[] = [];
 
   dataSource = new MatTableDataSource<Producto>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private productoService: ProductoService, private permisoService: PermisoService,
-    private route: ActivatedRoute, private fg: FormBuilder
+    private route: ActivatedRoute, private fg: FormBuilder,private categoriaService: CategoriaService
   ) {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
@@ -51,7 +60,8 @@ export class ProductoComponent {
         nombre: ['', Validators.required],
         descripcion: ['', Validators.required],
         cantidad: ['', Validators.required],
-        precio: ['', Validators.required]
+        precio: ['', Validators.required],
+        categoriaId: ['', Validators.required]
       }
     )
   }
@@ -67,7 +77,9 @@ export class ProductoComponent {
           nombre: item.nombre,
           descripcion: item.descripcion,
           cantidad: item.cantidad,
-          precio: item.precio
+          precio: item.precio,
+          categoria: item.categorias,
+          idCategoria: item.categorias.length > 0 ?item.categorias[0].id:0
         }));
 
         this.SOLICITUDES_DATA = productos;
@@ -82,6 +94,8 @@ export class ProductoComponent {
         this.PuedeVer = data.tienePermiso;
       }
     });
+
+    this.ObtenerCategorias();
   }
 
   applyFilter(event: Event) {
@@ -105,8 +119,11 @@ export class ProductoComponent {
         nombre: forms.nombre,
         descripcion: forms.descripcion,
         cantidad: forms.cantidad,
-        precio: forms.precio
+        precio: forms.precio,
+        categorias :this.categorias.find(x=> x.id == forms.categoriaId)
       };
+
+      console.log("addproducto",this.AddProducto);
 
     if (this.titulo == 'Agregar Nuevo Producto') {
     
@@ -127,7 +144,8 @@ export class ProductoComponent {
         nombre: forms.nombre,
         descripcion: forms.descripcion,
         cantidad: forms.cantidad,
-        precio: forms.precio
+        precio: forms.precio,
+        idCategoria: forms.categoriaId
       };
       
       this.productoService.ActualizarProducto(this.AddProducto).subscribe({
@@ -154,11 +172,13 @@ export class ProductoComponent {
     this.titulo = 'Editar producto';
 
     this.idProductoEditar = producto.id;
+    console.log(producto);
 
     this.formulario.patchValue({ 'nombre': producto.nombre })
     this.formulario.patchValue({ 'descripcion': producto.descripcion })
     this.formulario.patchValue({ 'cantidad': producto.cantidad })
     this.formulario.patchValue({ 'precio': producto.precio })
+    this.formulario.patchValue({ 'categoriaId': producto.idCategoria })
 
   }
 
@@ -186,6 +206,21 @@ export class ProductoComponent {
 
   CancelarEliminar(){
     this.ModalEliminar = false;
+  }
+
+  ObtenerCategorias(){
+     //Obtenemos los productos
+        this.categoriaService.ObtenerCategoria().subscribe({
+          next: (data) => {
+            console.log(data)
+            this.categorias = data.map((item: any) => ({
+              id: item.id,
+              nombre: item.nombre,
+              tipoCategoria: item.tipoCategoria
+            }));
+  
+          }
+        });
   }
 
 }

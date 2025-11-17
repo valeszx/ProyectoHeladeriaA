@@ -264,7 +264,6 @@ mat-paginator {
 }
 
 .modal-content {
-  text-align: center;
   margin-bottom: 20px;
 }
 
@@ -283,4 +282,16 @@ button {
 .btn-danger {
   background-color: #dc3545;
   color: white;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    
+    /* Buena práctica: 
+      Esto asegura que si le agregas padding o bordes, 
+      no se desborde de su contenedor.
+    */
+    box-sizing: border-box; 
 }

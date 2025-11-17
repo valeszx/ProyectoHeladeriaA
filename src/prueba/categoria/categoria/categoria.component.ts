@@ -10,7 +10,7 @@ import { CategoriaService } from '../../../servicios/categoria.service';
 
 
 export interface Categoria {
-  id:number;
+  id: number;
   nombre: string;
   tipoCategoria: string;
 }
@@ -21,19 +21,20 @@ export interface Categoria {
   styleUrl: './categoria.component.scss'
 })
 export class CategoriaComponent {
- // La primera columna invisible para los puntos suspensivos (menú de acciones)
+  // La primera columna invisible para los puntos suspensivos (menú de acciones)
   SOLICITUDES_DATA: Categoria[] = [];
   displayedColumns: string[] = ['Nombre', 'TipoCategoria', 'Editar', 'Eliminar'];
   PuedeVer: boolean = false;
   @Input() id!: string
   formulario!: FormGroup;
-  idProductoEditar:number =0;
+  idCategoriaEditar: number = 0;
   Modal: boolean = false;
   ModalEliminar: boolean = false;
-  AddProducto!: Producto;
-  titulo: string = 'Agregar Nuevo Producto'
-  tituloEliminar: string = 'Eliminar Producto'
-  idProductoEliminar:number =0;
+  AddCategoria!: Categoria;
+  titulo: string = 'Agregar Nueva Categoria'
+  tituloEliminar: string = 'Eliminar Categoria'
+  idProductoEliminar: number = 0;
+  categorias: any[] = [];
 
   dataSource = new MatTableDataSource<Categoria>();
 
@@ -79,8 +80,11 @@ export class CategoriaComponent {
         this.PuedeVer = data.tienePermiso;
       }
     });
+
+    this.ObtenerCategorias();
   }
 
+  //Filtro de busqueda
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -97,17 +101,15 @@ export class CategoriaComponent {
 
     var forms = this.formulario.value;
 
-      this.AddProducto = {
-        id :0,
-        nombre: forms.nombre,
-        descripcion: forms.descripcion,
-        cantidad: forms.cantidad,
-        precio: forms.precio
-      };
+    this.AddCategoria = {
+      id: 0,
+      nombre: forms.nombre,
+      tipoCategoria: forms.tipoCategoria
+    };
 
-    if (this.titulo == 'Agregar Nuevo Producto') {
-    
-      this.categoriaService.AgregarCategoria(this.AddProducto).subscribe({
+    if (this.titulo == 'Agregar Nueva Categoria') {
+
+      this.categoriaService.AgregarCategoria(this.AddCategoria).subscribe({
         next: (data) => {
           if (data) {
             this.Modal = false;
@@ -117,17 +119,15 @@ export class CategoriaComponent {
         }
       });
     }
-    else{
+    else {
 
-      this.AddProducto = {
-        id :this.idProductoEditar,
-        nombre: forms.nombre,
-        descripcion: forms.descripcion,
-        cantidad: forms.cantidad,
-        precio: forms.precio
-      };
-      
-      this.categoriaService.ActualizarCategoria(this.AddProducto).subscribe({
+      this.AddCategoria = {
+      id :this.idCategoriaEditar,
+      nombre: forms.nombre,
+      tipoCategoria: forms.tipoCategoria
+    };
+
+      this.categoriaService.ActualizarCategoria(this.AddCategoria).subscribe({
         next: (data) => {
           if (data) {
             this.Modal = false;
@@ -143,19 +143,19 @@ export class CategoriaComponent {
   //boton agregar producto levanta el modal
   agregarProducto() {
     this.Modal = true;
-    this.titulo = 'Agregar Nuevo Producto';
+    this.titulo = 'Agregar Nueva Categoria';
   }
 
-  editarProducto(producto: any) {
+  //boton editar producto levanta el modal con los datos cargados
+  editarProducto(categoria: any) {
     this.Modal = true;
-    this.titulo = 'Editar producto';
+    this.titulo = 'Editar categoria';
 
-    this.idProductoEditar = producto.id;
+    this.idCategoriaEditar = categoria.id;
 
-    this.formulario.patchValue({ 'nombre': producto.nombre })
-    this.formulario.patchValue({ 'descripcion': producto.descripcion })
-    this.formulario.patchValue({ 'cantidad': producto.cantidad })
-    this.formulario.patchValue({ 'precio': producto.precio })
+    this.formulario.patchValue({ 'nombre': categoria.nombre })
+    this.formulario.patchValue({ 'tipoCategoria': categoria.tipoCategoria })
+
 
   }
 
@@ -164,24 +164,42 @@ export class CategoriaComponent {
     this.formulario.reset();
   }
 
-  eliminar(){
+  //Boton eliminar del modal eliminar
+  eliminar() {
     this.categoriaService.EliminarCategoria(this.idProductoEliminar).subscribe({
-        next: (data) => {
-          if (data) {
-            this.ModalEliminar = false;
-            this.limpiarFormulario();
-            this.ngOnInit();
-          }
+      next: (data) => {
+        if (data) {
+          this.ModalEliminar = false;
+          this.limpiarFormulario();
+          this.ngOnInit();
         }
-      });
+      }
+    });
   }
 
-  EliminarProducto(producto: any){
+  //boton eliminar producto levanta el modal eliminar
+  EliminarProducto(producto: any) {
     this.idProductoEliminar = producto.id;
     this.ModalEliminar = true;
   }
 
-  CancelarEliminar(){
+  //Boton cancelar del modal eliminar
+  CancelarEliminar() {
     this.ModalEliminar = false;
+  }
+
+  ObtenerCategorias() {
+    //Obtenemos las categorias
+    this.categoriaService.ObtenerCategoria().subscribe({
+      next: (data) => {
+        console.log(data)
+        this.categorias = data.map((item: any) => ({
+          id: item.id,
+          nombre: item.nombre,
+          tipoCategoria: item.tipoCategoria
+        }));
+
+      }
+    });
   }
 }

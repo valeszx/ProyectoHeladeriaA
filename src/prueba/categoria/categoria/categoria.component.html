@@ -56,8 +56,6 @@
 
 <mat-paginator [pageSizeOptions]="[4, 10, 25]" showFirstLastButtons></mat-paginator>
 
-<h2 class="modal-title" *ngIf="Modal">{{titulo}}</h2>
-
 <div class="modal-overlay" (click)="cancelar()" *ngIf="Modal">
     <div class="modal-dialog" (click)="$event.stopPropagation()">
 
@@ -75,29 +73,15 @@
                         obligatorio.</span>
                 </div>
 
-                <div class="form-group">
-                    <label>Descripción</label>
-                    <textarea formControlName="descripcion"></textarea>
+                 <div class="form-group">
+                    <label>Tipo Categoria</label>
+                    <input type="text" formControlName="tipoCategoria" required>
                     <span class="error-msg"
-                        *ngIf="formulario.get('descripcion')?.invalid && formulario.get('descripcion')?.touched">La
-                        descripcion es obligatorio.</span>
-                </div>
-
-                <div class="form-group half-width">
-                    <label>Cantidad</label>
-                    <input type="number" formControlName="cantidad" required min="1">
-                    <span class="error-msg"
-                        *ngIf="formulario.get('cantidad')?.invalid && formulario.get('cantidad')?.touched">La cantidad
-                        es obligatorio.</span>
-                </div>
-
-                <div class="form-group half-width">
-                    <label>Precio</label>
-                    <input type="number" formControlName="precio" required step="0.01" min="0.01">
-                    <span class="error-msg"
-                        *ngIf="formulario.get('precio')?.invalid && formulario.get('precio')?.touched">El precio es
+                        *ngIf="formulario.get('tipoCategoria')?.invalid && formulario.get('tipoCategoria')?.touched">El tipo de categoria es
                         obligatorio.</span>
                 </div>
+
+               
             </form>
         </div>
 
@@ -117,7 +101,7 @@
     </div>
 
     <div class="modal-content">
-      <p>¿Desea eliminar el producto?</p>
+      <p>¿Desea eliminar la categoria?</p>
     </div>
 
     <div class="modal-actions">
