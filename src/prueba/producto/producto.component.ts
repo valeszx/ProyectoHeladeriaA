@@ -145,7 +145,7 @@ export class ProductoComponent {
         descripcion: forms.descripcion,
         cantidad: forms.cantidad,
         precio: forms.precio,
-        idCategoria: forms.categoriaId
+        categorias :this.categorias.find(x=> x.id == forms.categoriaId)
       };
       
       this.productoService.ActualizarProducto(this.AddProducto).subscribe({
