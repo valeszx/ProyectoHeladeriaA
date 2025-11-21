@@ -4,38 +4,56 @@ $color-texto-titulo: #FFF8E1; // Crema claro
 $color-texto-desc: #D7CCC8; // Beige suave
 $color-borde-logo: #8D6E63;
 
-.menu-background {
-  background-color: $color-fondo;
-  min-height: 100%;
-  padding: 2rem;
-  font-family: 'Roboto', sans-serif; // O la fuente que prefieras
-  box-sizing: border-box;
+.navigation-header {
+  max-width: 1000px;
+  margin: 0 auto 1.5rem auto; // Centrado y con margen abajo
+  padding: 0 1rem; // Un poco de aire a los lados
 }
 
-/* --- Estilos del Logo Central --- */
-.header-logo {
-  display: flex;
-  flex-direction: column;
+.btn-back {
+  background-color: transparent; // Fondo transparente
+  color: $color-texto-titulo;    // Letra color crema
+  border: 2px solid $color-borde-logo; // Borde café claro
+  
+  padding: 0.6rem 1.5rem;
+  border-radius: 50px; // Bordes muy redondos (estilo píldora)
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  
+  display: inline-flex;
   align-items: center;
-  margin-bottom: 3rem;
+  gap: 8px; // Espacio entre la flecha y el texto
+  transition: all 0.3s ease; // Animación suave
 
-  .logo-img {
-    width: 150px; // Ajusta según el tamaño de tu logo real
-    height: auto;
-    // Opcional: Un fondo circular si tu logo es transparente
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 50%;
-    padding: 10px;
+  .arrow {
+    font-size: 1.2rem;
+    line-height: 0;
+    transition: transform 0.3s ease;
   }
 
-  .brand-subtitle {
-    color: $color-texto-desc;
-    font-size: 0.8rem;
-    letter-spacing: 2px;
-    margin-top: 0.5rem;
-    text-transform: uppercase;
+  // Efecto Hover (cuando pasas el mouse)
+  &:hover {
+    background-color: $color-texto-titulo; // Se rellena de color crema
+    color: #3E2723; // La letra cambia a café oscuro para leerse bien
+    border-color: $color-texto-titulo;
+    transform: translateX(-5px); // Se mueve un poquito a la izquierda
+
+    .arrow {
+      transform: translateX(-3px); // La flecha se mueve para indicar "atrás"
+    }
+  }
+
+  // Efecto Click
+  &:active {
+    transform: scale(0.95);
   }
 }
+
+// ... Aquí abajo siguen tus estilos de .products-grid ...
 
 /* --- Grilla de Productos --- */
 .products-grid {

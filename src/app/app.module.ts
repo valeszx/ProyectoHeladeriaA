@@ -23,6 +23,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { WelcomeComponent } from '../prueba/Welcome/welcome/welcome.component';
 import { CategoriaComponent } from '../prueba/categoria/categoria/categoria.component';
+import { WelcomeCategoriaComponent } from '../prueba/Welcome/Categoria/welcome-categoria/welcome-categoria.component';
+import { WelcomeProductoComponent } from '../prueba/Welcome/Producto/welcome-producto/welcome-producto.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { CategoriaComponent } from '../prueba/categoria/categoria/categoria.comp
     InicioComponent,
     ProductoComponent,
     WelcomeComponent,
-    CategoriaComponent
+    CategoriaComponent,
+    WelcomeCategoriaComponent,
+    WelcomeProductoComponent
   ],
   imports: [
     BrowserModule,

@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CategoriaService } from '../../../../servicios/categoria.service';
 
 interface Producto {
   id: number;
@@ -8,12 +10,20 @@ interface Producto {
   imagen: string;
 }
 
+export interface Categoria {
+  id: number;
+  nombre: string;
+  tipoCategoria: string;
+  imagen: string
+}
+
 @Component({
-  selector: 'app-welcome',
-  templateUrl: './welcome.component.html',
-  styleUrl: './welcome.component.scss'
+  selector: 'app-welcome-categoria',
+  templateUrl: './welcome-categoria.component.html',
+  styleUrl: './welcome-categoria.component.scss'
 })
-export class WelcomeComponent {
+export class WelcomeCategoriaComponent {
+  categorias: any[] = [];
 // Esta lista simula tu base de datos. 
   // Luego conectaremos esto a tu Servicio real.
   productos: Producto[] = [
@@ -48,9 +58,27 @@ export class WelcomeComponent {
     // Puedes agregar más aquí...
   ];
 
-  constructor() { }
+  constructor(private route: Router,private router: ActivatedRoute,private categoriaService: CategoriaService){
+    this.ObtenerCategorias();
+  }
 
-  ngOnInit(): void {
-    // Aquí llamaríamos a tu servicio: this.productoService.getProductos()...
+  ObtenerProductos(){
+   this.route.navigate(['welcomeProducto'], { relativeTo: this.router.parent });
+  }
+
+   ObtenerCategorias() {
+    //Obtenemos las categorias
+    this.categoriaService.ObtenerCategoria().subscribe({
+      next: (data) => {
+        console.log(data)
+        this.categorias = data.map((item: any) => ({
+          id: item.id,
+          nombre: item.nombre,
+          tipoCategoria: item.tipoCategoria,
+          imagen: 'assets/Imagenes/user.png'
+        }));
+
+      }
+    });
   }
 }

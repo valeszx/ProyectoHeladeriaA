@@ -4,6 +4,8 @@ import { LoginComponent } from '../prueba/login/login.component';
 import { ProductoComponent } from '../prueba/producto/producto.component';
 import { WelcomeComponent } from '../prueba/Welcome/welcome/welcome.component';
 import { CategoriaComponent } from '../prueba/categoria/categoria/categoria.component';
+import { WelcomeCategoriaComponent } from '../prueba/Welcome/Categoria/welcome-categoria/welcome-categoria.component';
+import { WelcomeProductoComponent } from '../prueba/Welcome/Producto/welcome-producto/welcome-producto.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,16 +13,21 @@ export const routes: Routes = [
     {
         path: 'inicio/:id', component: InicioComponent, children: [
             // Cuando la URL es /Inicio, muestra el componente de bienvenida
-            { path: '', component: WelcomeComponent },
+            {
+                path: '', component: WelcomeComponent, children: [
+                    { path: '', component: WelcomeCategoriaComponent },
+                    { path: 'welcomeProducto', component: WelcomeProductoComponent },
+                ]
+            },
 
             // Cuando la URL es /Inicio/Producto, muestra el ProductoComponent
             { path: 'Producto/:id', component: ProductoComponent },
             { path: 'Categoria/:id', component: CategoriaComponent },
 
             // Debes cambiar los routerLink en el menú para que usen esta ruta: ['/Inicio/Producto']
-           
+
         ]
-         
+
     },
 
 ];

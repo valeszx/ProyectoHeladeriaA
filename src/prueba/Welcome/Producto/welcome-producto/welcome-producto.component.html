@@ -1,0 +1,26 @@
+<div class="navigation-header">
+  <button class="btn-back" (click)="goBack()">
+    <span class="arrow">←</span> Volver
+  </button>
+</div>
+
+<div class="products-grid">
+
+    <div class="product-card" *ngFor="let item of productos">
+      
+      <div class="product-image">
+        <img [src]="item.imagen" [alt]="item.nombre">
+      </div>
+
+      <div class="product-details">
+        <div class="product-header">
+          <h3 class="product-name">{{ item.nombre | uppercase }}</h3>
+          <span class="product-price">{{ item.precio | currency:'NIO':'symbol-narrow':'1.0-0' }}</span>
+        </div>
+        <p class="product-desc">{{ item.descripcion }}</p>
+      </div>
+
+    </div>
+
+  </div>
+

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 interface Producto {
   id: number;
@@ -9,14 +10,12 @@ interface Producto {
 }
 
 @Component({
-  selector: 'app-welcome',
-  templateUrl: './welcome.component.html',
-  styleUrl: './welcome.component.scss'
+  selector: 'app-welcome-producto',
+  templateUrl: './welcome-producto.component.html',
+  styleUrl: './welcome-producto.component.scss'
 })
-export class WelcomeComponent {
-// Esta lista simula tu base de datos. 
-  // Luego conectaremos esto a tu Servicio real.
-  productos: Producto[] = [
+export class WelcomeProductoComponent {
+ productos: Producto[] = [
     {
       id: 1,
       nombre: 'Copa Suprema',
@@ -48,9 +47,10 @@ export class WelcomeComponent {
     // Puedes agregar más aquí...
   ];
 
-  constructor() { }
+  constructor(private router: Router,private route: ActivatedRoute){}
 
-  ngOnInit(): void {
-    // Aquí llamaríamos a tu servicio: this.productoService.getProductos()...
+  goBack(){
+    // Esto navega "un nivel arriba" relativo a donde estás
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }
