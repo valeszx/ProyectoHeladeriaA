@@ -3,12 +3,12 @@
     <div class="product-card" *ngFor="let item of categorias">
       
       <div class="product-image">
-        <img [src]="item.imagen" [alt]="item.nombre">
+        <img [src]="item.imagen">
       </div>
 
       <div class="product-details">
         <div class="product-header">
-          <h3 class="product-name" (click)="ObtenerProductos()">{{ item.nombre | uppercase }}</h3>
+          <h3 class="product-name" (click)="ObtenerProductos(item.id)">{{ item.nombre | uppercase }}</h3>
           <!--<span class="product-price">{{ item.precio | currency:'NIO':'symbol-narrow':'1.0-0' }}</span>-->
         </div>
         <!--<p class="product-desc">{{ item.descripcion }}</p></span>-->

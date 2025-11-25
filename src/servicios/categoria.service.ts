@@ -16,12 +16,12 @@ export class CategoriaService {
        return this.http.get<any>(`${this.apiUrl}`);
      }
  
-     AgregarCategoria(categoria: any): Observable<any> {
-       return this.http.post<any>(`${this.apiUrl}`, categoria);
+     AgregarCategoria(formData: FormData): Observable<any> {
+       return this.http.post<any>(`${this.apiUrl}`, formData);
      }
  
-     ActualizarCategoria(categoria: any): Observable<any> {
-       return this.http.put<any>(`${this.apiUrl}`, categoria);
+     ActualizarCategoria(formData: FormData): Observable<any> {
+       return this.http.put<any>(`${this.apiUrl}`, formData);
      }
  
      EliminarCategoria(id: any): Observable<any> {

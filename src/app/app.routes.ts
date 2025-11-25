@@ -16,7 +16,7 @@ export const routes: Routes = [
             {
                 path: '', component: WelcomeComponent, children: [
                     { path: '', component: WelcomeCategoriaComponent },
-                    { path: 'welcomeProducto', component: WelcomeProductoComponent },
+                    { path: 'welcomeProducto/:idCategoria', component: WelcomeProductoComponent },
                 ]
             },
 

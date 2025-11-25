@@ -13,6 +13,7 @@ export interface Categoria {
   id: number;
   nombre: string;
   tipoCategoria: string;
+  rutaImagen: string;
 }
 
 @Component({
@@ -23,7 +24,7 @@ export interface Categoria {
 export class CategoriaComponent {
   // La primera columna invisible para los puntos suspensivos (menú de acciones)
   SOLICITUDES_DATA: Categoria[] = [];
-  displayedColumns: string[] = ['Nombre', 'TipoCategoria', 'Editar', 'Eliminar'];
+  displayedColumns: string[] = ['Nombre', 'TipoCategoria', 'Imagen', 'Editar', 'Eliminar'];
   PuedeVer: boolean = false;
   @Input() id!: string
   formulario!: FormGroup;
@@ -35,6 +36,9 @@ export class CategoriaComponent {
   tituloEliminar: string = 'Eliminar Categoria'
   idProductoEliminar: number = 0;
   categorias: any[] = [];
+  selectedFile: File | null = null;
+  imagePreview: string | ArrayBuffer | null = null;
+  private readonly API_URL_BASE = 'https://localhost:7191';
 
   dataSource = new MatTableDataSource<Categoria>();
 
@@ -65,7 +69,11 @@ export class CategoriaComponent {
         var categoria = data.map((item: any) => ({
           id: item.id,
           nombre: item.nombre,
-          tipoCategoria: item.tipoCategoria
+          tipoCategoria: item.tipoCategoria,
+          // Concatena la URL base a la ruta relativa (item.ruta)
+          rutaImagen: item.ruta
+            ? `${this.API_URL_BASE}${item.ruta}`
+            : null // Maneja el caso en que la ruta sea null
         }));
 
         this.SOLICITUDES_DATA = categoria;
@@ -99,17 +107,23 @@ export class CategoriaComponent {
   //Boton guardar del modal
   guardar() {
 
-    var forms = this.formulario.value;
+    // 1. Crear el objeto FormData
+    const formData = new FormData();
 
-    this.AddCategoria = {
-      id: 0,
-      nombre: forms.nombre,
-      tipoCategoria: forms.tipoCategoria
-    };
+    // 2. Agregar los datos del formulario (nombre y tipoCategoria)
+    const forms = this.formulario.value;
+    formData.append('nombre', forms.nombre);
+    formData.append('tipoCategoria', forms.tipoCategoria);
+
+    // 3. Agregar el archivo de imagen si existe
+    // 'imagen' es la clave que tu API backend esperará para el archivo.
+    if (this.selectedFile) {
+      formData.append('imagen', this.selectedFile, this.selectedFile.name);
+    }
 
     if (this.titulo == 'Agregar Nueva Categoria') {
 
-      this.categoriaService.AgregarCategoria(this.AddCategoria).subscribe({
+      this.categoriaService.AgregarCategoria(formData).subscribe({
         next: (data) => {
           if (data) {
             this.Modal = false;
@@ -121,13 +135,11 @@ export class CategoriaComponent {
     }
     else {
 
-      this.AddCategoria = {
-      id :this.idCategoriaEditar,
-      nombre: forms.nombre,
-      tipoCategoria: forms.tipoCategoria
-    };
+      // Para actualizar, también debemos enviar el ID, que no está en el formulario.
+      // Lo adjuntamos directamente al FormData.
+      formData.append('id', this.idCategoriaEditar.toString());
 
-      this.categoriaService.ActualizarCategoria(this.AddCategoria).subscribe({
+      this.categoriaService.ActualizarCategoria(formData).subscribe({
         next: (data) => {
           if (data) {
             this.Modal = false;
@@ -156,7 +168,17 @@ export class CategoriaComponent {
     this.formulario.patchValue({ 'nombre': categoria.nombre })
     this.formulario.patchValue({ 'tipoCategoria': categoria.tipoCategoria })
 
-
+    // 2. Manejar la imagen existente (la ruta)
+    // Limpiamos cualquier archivo que se haya seleccionado antes.
+    this.selectedFile = null; 
+    // Verificamos si la categoría tiene una ruta de imagen guardada en la BD.
+    if (categoria.rutaImagen) {
+        // Concatena la URL base para crear la URL completa que el navegador puede cargar
+        this.imagePreview = `${categoria.rutaImagen}`;
+    } else {
+        // Si no hay imagen guardada, limpiamos la previsualización.
+        this.imagePreview = null;
+    }
   }
 
   //Cuando se guarda o cancela el modal se limpia el formulario
@@ -196,10 +218,34 @@ export class CategoriaComponent {
         this.categorias = data.map((item: any) => ({
           id: item.id,
           nombre: item.nombre,
-          tipoCategoria: item.tipoCategoria
+          tipoCategoria: item.tipoCategoria,
+          // Concatena la URL base a la ruta relativa (item.ruta)
+          rutaImagen: item.ruta
+            ? `${this.API_URL_BASE}${item.ruta}`
+            : null // Maneja el caso en que la ruta sea null
         }));
 
       }
     });
+  }
+
+  /**
+     * Maneja la selección del archivo de imagen.
+     * @param event Evento de cambio del input file.
+     */
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+
+    if (file) {
+      this.selectedFile = file;
+
+      // Lógica para la previsualización de la imagen
+      const reader = new FileReader();
+      reader.onload = e => this.imagePreview = reader.result;
+      reader.readAsDataURL(file);
+    } else {
+      this.selectedFile = null;
+      this.imagePreview = null;
+    }
   }
 }

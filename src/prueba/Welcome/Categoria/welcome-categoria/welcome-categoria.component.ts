@@ -24,6 +24,7 @@ export interface Categoria {
 })
 export class WelcomeCategoriaComponent {
   categorias: any[] = [];
+  private readonly API_URL_BASE = 'https://localhost:7191';
 // Esta lista simula tu base de datos. 
   // Luego conectaremos esto a tu Servicio real.
   productos: Producto[] = [
@@ -62,8 +63,8 @@ export class WelcomeCategoriaComponent {
     this.ObtenerCategorias();
   }
 
-  ObtenerProductos(){
-   this.route.navigate(['welcomeProducto'], { relativeTo: this.router.parent });
+  ObtenerProductos(idCategoria:number){
+   this.route.navigate(['welcomeProducto',idCategoria], { relativeTo: this.router.parent });
   }
 
    ObtenerCategorias() {
@@ -75,7 +76,10 @@ export class WelcomeCategoriaComponent {
           id: item.id,
           nombre: item.nombre,
           tipoCategoria: item.tipoCategoria,
-          imagen: 'assets/Imagenes/user.png'
+          // Concatena la URL base a la ruta relativa (item.ruta)
+          imagen: item.ruta
+            ? `${this.API_URL_BASE}${item.ruta}`
+            : null // Maneja el caso en que la ruta sea null
         }));
 
       }

@@ -25,6 +25,7 @@ import { WelcomeComponent } from '../prueba/Welcome/welcome/welcome.component';
 import { CategoriaComponent } from '../prueba/categoria/categoria/categoria.component';
 import { WelcomeCategoriaComponent } from '../prueba/Welcome/Categoria/welcome-categoria/welcome-categoria.component';
 import { WelcomeProductoComponent } from '../prueba/Welcome/Producto/welcome-producto/welcome-producto.component';
+import { MatOption } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { WelcomeProductoComponent } from '../prueba/Welcome/Producto/welcome-pro
     MatPaginatorModule,
     MatSortModule,
     MatInputModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatOption
   ],
   providers: [
     provideAnimationsAsync()

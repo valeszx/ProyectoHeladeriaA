@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ProductoService } from '../../../../servicios/producto.service';
+import { Location } from '@angular/common';
 
 interface Producto {
   id: number;
@@ -15,7 +17,8 @@ interface Producto {
   styleUrl: './welcome-producto.component.scss'
 })
 export class WelcomeProductoComponent {
- productos: Producto[] = [
+  idCategoria: string = '';
+  productos: Producto[] = [
     {
       id: 1,
       nombre: 'Copa Suprema',
@@ -47,10 +50,35 @@ export class WelcomeProductoComponent {
     // Puedes agregar más aquí...
   ];
 
-  constructor(private router: Router,private route: ActivatedRoute){}
+  constructor(private router: Router, private route: ActivatedRoute, private productoService: ProductoService,
+    private location: Location
+  ) {
 
-  goBack(){
+    //Obtenemos los productos
+    this.productoService.ObtenerProductos().subscribe({
+      next: (data) => {
+        var productos = data.map((item: any) => ({
+          id: item.id,
+          nombre: item.nombre,
+          descripcion: item.descripcion,
+          cantidad: item.cantidad,
+          precio: item.precio,
+          categoria: item.categorias,
+          idCategoria: item.categorias.length > 0 ? item.categorias[0].id : 0
+        }));
+
+      }
+    });
+
+    this.route.paramMap.subscribe(params => {
+      this.idCategoria = params.get('id')!;
+    });
+
+    console.log("idc",this.idCategoria)
+  }
+
+  goBack() {
     // Esto navega "un nivel arriba" relativo a donde estás
-    this.router.navigate(['../'], { relativeTo: this.route });
+    this.location.back();
   }
 }

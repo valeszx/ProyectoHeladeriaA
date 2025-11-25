@@ -26,6 +26,13 @@
             <td mat-cell *matCellDef="let element"> {{element.tipoCategoria}} </td>
         </ng-container>
 
+        <ng-container matColumnDef="Imagen">
+            <th mat-header-cell *matHeaderCellDef> Imagen </th>
+            <td mat-cell *matCellDef="let element">
+                <img [src]="element.rutaImagen"  class="table-image">
+            </td>
+        </ng-container>
+
         <!-- NUEVO: Editar -->
         <ng-container matColumnDef="Editar">
             <th mat-header-cell *matHeaderCellDef class="centered"> </th>
@@ -73,15 +80,30 @@
                         obligatorio.</span>
                 </div>
 
-                 <div class="form-group">
+                <div class="form-group">
                     <label>Tipo Categoria</label>
                     <input type="text" formControlName="tipoCategoria" required>
                     <span class="error-msg"
-                        *ngIf="formulario.get('tipoCategoria')?.invalid && formulario.get('tipoCategoria')?.touched">El tipo de categoria es
+                        *ngIf="formulario.get('tipoCategoria')?.invalid && formulario.get('tipoCategoria')?.touched">El
+                        tipo de categoria es
                         obligatorio.</span>
                 </div>
 
-               
+                <div class="form-group">
+                    <label>Imagen</label>
+                    <input type="file" #fileInput hidden (change)="onFileSelected($event)">
+
+                    <button mat-flat-button color="accent" type="button" (click)="fileInput.click()">
+                        Seleccionar Imagen
+                    </button>
+                </div>
+
+                <div class="form-group image-preview-container" *ngIf="imagePreview">
+                    <label>Previsualización</label>
+                    <img [src]="imagePreview" alt="Previsualización de la imagen" class="image-preview">
+                </div>
+
+
             </form>
         </div>
 
@@ -94,21 +116,20 @@
 </div>
 
 <div class="modal-overlay" (click)="cancelar()" *ngIf="ModalEliminar">
-  <div class="modal-dialog" (click)="$event.stopPropagation()">
-    
-    <div class="modal-header">
-      <h2 class="modal-title">{{tituloEliminar}}</h2>
-    </div>
+    <div class="modal-dialog" (click)="$event.stopPropagation()">
 
-    <div class="modal-content">
-      <p>¿Desea eliminar la categoria?</p>
-    </div>
+        <div class="modal-header">
+            <h2 class="modal-title">{{tituloEliminar}}</h2>
+        </div>
 
-    <div class="modal-actions">
-      <button class="btn btn-secondary" (click)="CancelarEliminar()">Cancelar</button>
-      <button class="btn btn-danger" (click)="eliminar()">Aceptar</button>
+        <div class="modal-content">
+            <p>¿Desea eliminar la categoria?</p>
+        </div>
+
+        <div class="modal-actions">
+            <button class="btn btn-secondary" (click)="CancelarEliminar()">Cancelar</button>
+            <button class="btn btn-danger" (click)="eliminar()">Aceptar</button>
+        </div>
+
     </div>
-    
-  </div>
 </div>
-
