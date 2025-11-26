@@ -1,59 +1,62 @@
 /* my-component.component.css */
 
 .sidenav-container {
-  /* Hacemos que ocupe el 100% de la altura de la ventana (para incluir el espacio superior) */
-  height: 100vh; 
-  /* Asegúrate de que el body/html no tenga margen extra para que 100vh funcione bien */
+  height: 100vh;
 }
+
+/* 1. Mantenemos el toolbar Fijo en la parte superior y le damos un Z-INDEX alto. */
+.transparent-toolbar {
+  /* Hacemos el toolbar fijo para que no se mueva con el scroll */
+  position: fixed;
+  top: 0;
+  /* Z-Index alto para que esté SIEMPRE sobre cualquier otro elemento (como el contenido del router-outlet) */
+  z-index: 100; 
+  width: 100%; /* Aseguramos que ocupe todo el ancho */
+
+  background: none;
+  color: #444; 
+  display: flex; 
+  align-items: center; 
+}
+
+/* 2. Ajustamos el CONTENIDO principal para que empiece justo debajo del toolbar. */
+/* Esto es crucial si el toolbar es 'fixed' o 'absolute' y el contenido se solapa. */
+mat-sidenav-content {
+    /* El padding superior debe ser igual a la altura de tu mat-toolbar (generalmente 64px) */
+    padding-top: 64px; 
+    /* Asegúrate de que el contenido principal no tenga overflow raro */
+    overflow: auto; 
+}
+
+
+/* El resto de estilos se mantienen igual o se ajustan si es necesario */
 
 .toolbar-spacer{
   cursor: pointer;
 }
 
-/* my-component.component.css */
-
-.transparent-toolbar {
-  position: absolute;
-  top: 0;
-  z-index: 10;
-  background: none;
-  color: #444; 
-  
-  display: flex; 
-  align-items: center; 
-  
-  /* Opcional: Eliminar todo el padding del toolbar si solo tienes el botón */
-  /* padding: 0 !important; */ 
-}
-
-
-
-/* ... el resto del CSS se mantiene igual ... */
-
-/* 1. Contenedor principal para la imagen de fondo */
-.welcome-background {
-  /* Debe seguir ocupando el 100% del espacio del sidenav-content */
-  height: 100%;
-  width: 100%;
-
-  background-image: url('/assets/Imagenes/Inventario.webp');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-
-  /* IMPORTANTE: Añadimos un padding superior que sea igual a la altura del toolbar (típicamente 64px)
-     para que el texto de bienvenida NO se superponga al toolbar */
-  padding-top: 64px; 
-}
-
+/* El estilo del sidenav (lista) se mantiene igual */
 .mdc-list {
-    margin: 0;
-    padding: 58px 0 !important;
-    list-style-type: none;
+  /* Si el sidenav abre desde arriba, este padding puede ser excesivo si ya tienes el toolbar */
+  padding: 58px 0 !important;
+  list-style-type: none;
 }
 
-/* El resto de estilos (.welcome-text-overlay, h1, p) se mantienen igual. */
+/* Ajusta el background para que también respete el padding superior del sidenav-content */
+.welcome-background {
+    height: 100%;
+    width: 100%;
+
+    background-image: url('/assets/Imagenes/Inventario.webp');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    /* ELIMINAR ESTO: Ya lo manejamos en el 'mat-sidenav-content' global
+       padding-top: 64px; 
+    */
+}
