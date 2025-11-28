@@ -129,4 +129,14 @@ $color-borde-logo: #8D6E63;
       line-height: 1.4;
     }
   }
+
+:host ::ng-deep {
+    .modal-backdrop {
+        z-index: 1050 !important;
+    }
+
+    .modal {
+        z-index: 1055 !important;
+    }
+}
 }

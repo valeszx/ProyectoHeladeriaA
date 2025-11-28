@@ -2,3 +2,28 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* --- Anulación de Bootstrap Z-index y Enfocabilidad --- */
+
+/* Asegura que el input sea siempre interactivo dentro del modal */
+.modal-open .modal {
+    pointer-events: auto !important;
+}
+
+/* El backdrop (fondo oscuro) debe estar debajo del modal */
+.modal-backdrop {
+    z-index: 1050 !important;
+}
+
+/* El modal (caja de diálogo) debe estar encima */
+.modal {
+    z-index: 1055 !important;
+    overflow-y: auto !important; /* Asegura el scroll dentro del modal si es necesario */
+}
+
+/* Asegura que el input de cantidad pueda recibir el foco */
+#quantityModal .form-control {
+    pointer-events: auto !important;
+    background-color: white !important; /* Si tu tema oscuro lo oculta */
+    color: black !important;
+}

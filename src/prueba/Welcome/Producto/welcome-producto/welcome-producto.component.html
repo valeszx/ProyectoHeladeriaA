@@ -6,7 +6,9 @@
 
 <div class="products-grid">
 
-    <div class="product-card" *ngFor="let item of productos">
+    <div class="product-card" *ngFor="let item of productos"
+    (click)="openQuantityModal(item,quantityContent)"
+    >
       
       <div class="product-details">
         <div class="product-header">
@@ -19,4 +21,36 @@
     </div>
 
   </div>
+
+<ng-template #quantityContent let-modal>
+  <div class="modal-header bg-primary text-white">
+    <h5 class="modal-title">🛒 Agregar a Carrito</h5>
+    <button type="button" class="btn-close btn-close-white" 
+            aria-label="Cerrar" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  
+  <div class="modal-body">
+    <p>¿Cuántas unidades de **{{ selectedProduct.nombre }}** desea agregar?</p>
+    
+    <div class="mb-3">
+      <label for="productQuantity" class="form-label">Cantidad:</label>
+      <input type="number" 
+             class="form-control" 
+             id="productQuantity" 
+             min="1" 
+             value="1" 
+             #quantityInput>
+    </div>
+  </div>
+  
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close('Close click')">Cancelar</button>
+    
+    <button type="button" 
+            class="btn btn-success" 
+            (click)="addToCart(quantityInput.value)">
+      ✅ Agregar al Carrito
+    </button>
+  </div>
+</ng-template>
 

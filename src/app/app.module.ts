@@ -26,6 +26,7 @@ import { CategoriaComponent } from '../prueba/categoria/categoria/categoria.comp
 import { WelcomeCategoriaComponent } from '../prueba/Welcome/Categoria/welcome-categoria/welcome-categoria.component';
 import { WelcomeProductoComponent } from '../prueba/Welcome/Producto/welcome-producto/welcome-producto.component';
 import { MatOption } from '@angular/material/core';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import { MatOption } from '@angular/material/core';
     MatSortModule,
     MatInputModule,
     MatFormFieldModule,
-    MatOption
+    MatOption,
+    NgbModule
   ],
   providers: [
     provideAnimationsAsync()

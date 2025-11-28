@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, TemplateRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../../../../servicios/producto.service';
 import { Location } from '@angular/common';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 interface Producto {
   id: number;
@@ -21,8 +22,12 @@ export class WelcomeProductoComponent {
   idCategoria: string = '';
   productos: Producto[] = [];
 
+  // 2. Variable para almacenar el producto seleccionado
+  selectedProduct: Partial<Producto> = { nombre: '' };
+
   constructor(private router: Router, private route: ActivatedRoute, private productoService: ProductoService,
-    private location: Location
+    private location: Location,
+    private modalService: NgbModal
   ) {
 
     //Obtenemos el id que va en la ruta
@@ -48,14 +53,25 @@ export class WelcomeProductoComponent {
 
       }
     });
-
-    
-
     
   }
 
   goBack() {
     // Regresar atras
     this.location.back();
+  }
+
+   addToCart(quantity: string):void{
+    // Cierra el modal de NgbModal
+    this.modalService.dismissAll();
+   }
+
+   // 3. Método para manejar el clic en la tarjeta (abre el modal)
+  openQuantityModal(product: Producto, content: TemplateRef<any>): void {
+    // Almacena el producto para mostrar su nombre en el modal
+    this.selectedProduct = product; 
+    // Nota: El modal se abre automáticamente gracias a los atributos de Bootstrap (data-bs-toggle/target) en el HTML.
+    // Abrimos el modal. Usamos 'centered: true' para que se centre.
+    this.modalService.open(content, { centered: true });
   }
 }
