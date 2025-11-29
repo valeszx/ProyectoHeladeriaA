@@ -15,7 +15,7 @@
       <div class="cart-details" *ngIf="isCartVisible">
         <ul class="cart-items">
           <li *ngFor="let item of cartItems">
-            {{item.nombre}} - ${{item.precio | number:'1.2-2'}}
+            {{item.nombre}} - ${{item.precio | number:'1.2-2'}} - {{item.cantidad}}
           </li>
         </ul>
         <div class="cart-total">

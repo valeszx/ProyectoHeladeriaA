@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
+import { CardService } from '../../../servicios/card.service';
 
-interface Producto {
+export interface CartItem {
   id: number;
   nombre: string;
   precio: number;
-  descripcion: string;
-  imagen: string;
+  cantidad: number;
+  subtotal: number;
 }
 
 @Component({
@@ -16,55 +17,36 @@ interface Producto {
 export class WelcomeComponent {
   
 // Esta lista simula tu base de datos. 
-  // Luego conectaremos esto a tu Servicio real.
-  productos: Producto[] = [
-    {
-      id: 1,
-      nombre: 'Copa Suprema',
-      precio: 150,
-      descripcion: 'Deliciosa mezcla de vainilla, nueces y caramelo.',
-      imagen: 'assets/Imagenes/user.png' // Asegúrate de tener imágenes o usar urls de prueba
-    },
-    {
-      id: 2,
-      nombre: 'Matcha Delight',
-      precio: 180,
-      descripcion: 'Helado de té verde con topping de chocolate blanco.',
-      imagen: 'assets/Imagenes/user.png'
-    },
-    {
-      id: 3,
-      nombre: 'Mango Tropical',
-      precio: 120,
-      descripcion: 'Sorbete refrescante de mango con trozos de fruta.',
-      imagen: 'assets/Imagenes/user.png'
-    },
-    {
-      id: 4,
-      nombre: 'Choco Brownie',
-      precio: 200,
-      descripcion: 'Intenso chocolate oscuro con trozos de brownie casero.',
-      imagen: 'assets/Imagenes/user.png'
-    },
-    // Puedes agregar más aquí...
-  ];
+
 
   // El carrito será un array de productos
-  cartItems: Producto[] = [];
+  cartItems: CartItem[] = [];
 
   // Variables para el contador de productos y el total
   cartItemCount: number = 0;
   cartTotal: number = 0;
   isCartVisible: boolean = false; // Para controlar la visibilidad del carrito
 
-  constructor() { }
+  constructor(private cardService:CardService) { 
+
+    cardService.cardItem$.subscribe((resultado)=>{
+      this.cartTotal = 0;
+      this.cartItems = resultado;
+      this.cartItemCount = this.cartItems.length;
+
+      this.cartItems.map((x)=> {
+        let total = (x.cantidad * x.precio)
+        this.cartTotal = this.cartTotal +  total
+      })
+    })
+  }
 
   ngOnInit(): void {
     // Aquí llamaríamos a tu servicio: this.productoService.getProductos()...
   }
 
   // Método para agregar un producto al carrito
-  agregarAlCarrito(producto: Producto): void {
+  agregarAlCarrito(producto: CartItem): void {
     this.cartItems.push(producto);
     this.actualizarCarrito();
   }
@@ -81,7 +63,7 @@ export class WelcomeComponent {
   }
 
     // Método para eliminar un producto del carrito (opcional)
-  eliminarDelCarrito(producto: Producto): void {
+  eliminarDelCarrito(producto: CartItem): void {
     const index = this.cartItems.indexOf(producto);
     if (index > -1) {
       this.cartItems.splice(index, 1);

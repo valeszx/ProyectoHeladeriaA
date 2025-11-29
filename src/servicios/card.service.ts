@@ -1,0 +1,50 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+export interface CartItem {
+  id: number;
+  nombre: string;
+  precio: number;
+  cantidad: number;
+  subtotal: number;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CardService {
+
+  //Aqui se almacenara lo guardado en componente welcomeProducto y luego se escuchara en welcome
+  item = new BehaviorSubject<CartItem[]>([]);
+  cardItem$ = this.item.asObservable();
+
+  
+
+  addToCart(product: any, quantity: number): void {
+    const currentItems = this.item.getValue();
+    const existingItem = currentItems.find(item => item.id === product.id);
+
+    if (existingItem) {
+      // Si ya existe, actualiza la cantidad
+      existingItem.cantidad += quantity;
+      existingItem.subtotal = existingItem.cantidad * existingItem.precio;
+    } else {
+      // Si es nuevo, lo agrega
+      const newItem: CartItem = {
+        id: product.id,
+        nombre: product.nombre,
+        precio: product.precio,
+        cantidad: quantity,
+        subtotal: quantity * product.precio
+      };
+      currentItems.push(newItem);
+    }
+
+    // Emite la nueva lista a todos los suscriptores
+    this.item.next(currentItems);
+  }
+
+
+
+  constructor() { }
+}

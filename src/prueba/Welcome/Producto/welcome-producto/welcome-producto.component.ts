@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductoService } from '../../../../servicios/producto.service';
 import { Location } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CardService } from '../../../../servicios/card.service';
 
 interface Producto {
   id: number;
@@ -27,7 +28,8 @@ export class WelcomeProductoComponent {
 
   constructor(private router: Router, private route: ActivatedRoute, private productoService: ProductoService,
     private location: Location,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private cardService:CardService
   ) {
 
     //Obtenemos el id que va en la ruta
@@ -62,8 +64,18 @@ export class WelcomeProductoComponent {
   }
 
    addToCart(quantity: string):void{
-    // Cierra el modal de NgbModal
-    this.modalService.dismissAll();
+   const qty = parseInt(quantity, 10);
+    
+    if (this.selectedProduct && qty > 0) {
+      
+      // LLAMADA AL SERVICIO DE CARRITO
+      this.cardService.addToCart(this.selectedProduct, qty);
+
+      console.log(`Agregando ${qty} unidades de "${this.selectedProduct.nombre}" al carrito.`);
+      
+      // Cierra el modal de NgbModal
+      this.modalService.dismissAll(); 
+    }
    }
 
    // 3. Método para manejar el clic en la tarjeta (abre el modal)
