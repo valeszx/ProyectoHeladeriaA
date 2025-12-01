@@ -1,0 +1,66 @@
+/* Estilos para que el modal de la factura se vea como un recibo */
+.modal-header {
+    border-bottom: 2px dashed #ddd;
+    text-align: center;
+    h4 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #333;
+    }
+}
+
+.modal-body {
+    font-family: 'Courier New', Courier, monospace; /* Fuente estilo recibo */
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.receipt-info {
+    border-bottom: 1px dashed #eee;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.receipt-table {
+width: 100%;
+    margin-top: 15px;
+    
+    th, td {
+        // CORRECCIÓN CLAVE: Reducir el padding horizontal (0 3px) en celdas
+        padding: 5px 3px; 
+        border-top: none; 
+        border-bottom: none;
+    }
+    
+    // Opcional: Asegurar que las columnas de cantidad y precio sean angostas
+    thead th:nth-child(1), /* Uds. */
+    thead th:nth-child(3), /* Precio */
+    thead th:nth-child(4) { /* Total */
+        width: 15%; /* Darles un ancho fijo */
+    }
+
+    // Asegurar que la columna de descripción tome el espacio restante
+    thead th:nth-child(2) {
+        width: auto;
+    }
+
+    // ... (Resto de estilos de thead y tfoot) ...
+
+    tfoot {
+        td {
+            padding: 5px 3px; /* Usar el mismo padding reducido en el pie de página */
+        }
+    }
+
+    .table-total {
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-top: 2px solid #333; // Separador más fuerte para el total final
+    }
+}
+
+.modal-footer {
+    border-top: 2px dashed #ddd;
+    text-align: center;
+    justify-content: center; // Centra el botón
+}

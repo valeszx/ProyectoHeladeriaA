@@ -1,0 +1,45 @@
+<div class="modal-header">
+    <h4 class="modal-title text-center w-100" id="receiptModalLabel">Heladería María Auxiliadora</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+</div>
+<div class="modal-body">
+    <div class="receipt-info mb-3">
+        <p class="text-center mb-0">Fecha: {{ currentDate | date:'dd/MM/yyyy HH:mm' }}</p>
+        <p class="text-center mb-0">Atendido por: Sistema Automático</p>
+    </div>
+
+    <table class="table table-borderless table-sm receipt-table">
+        <thead>
+            <tr>
+                <th>Uds.</th>
+                <th>Descripción</th>
+                <th class="text-end">Precio</th>
+                <th class="text-end">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let item of cartItems">
+                <td>{{item.cantidad}}</td>
+                <td ass="text-break">{{item.nombre}}</td>
+                <td class="text-end">${{item.precio | number:'1.2-2'}}</td>
+                <td class="text-end">${{item.subtotal | number:'1.2-2'}}</td>
+            </tr>
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="3" class="text-end fw-bold">Subtotal:</td>
+                <td class="text-end fw-bold">${{ cartTotal | number:'1.2-2'}}</td>
+            </tr>
+
+            <tr class="table-total">
+                <td colspan="3" class="text-end fw-bold">Total a pagar:</td>
+                <td class="text-end fw-bold">${{ cartTotal | number:'1.2-2'}}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    <p class="text-center mt-3 mb-0">¡Gracias por su compra!</p>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="activeModal.close('Ok click')">Aceptar</button>
+</div>

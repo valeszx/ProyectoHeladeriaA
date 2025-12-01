@@ -43,6 +43,10 @@ export class CardService {
     // Emite la nueva lista a todos los suscriptores
     this.item.next(currentItems);
   }
+  // 💡 Nuevo método para vaciar el carrito
+  clearCart(): void {
+    this.item.next([]); // Emite una lista vacía
+  }
 
 
 

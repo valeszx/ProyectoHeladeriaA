@@ -27,6 +27,8 @@ import { WelcomeCategoriaComponent } from '../prueba/Welcome/Categoria/welcome-c
 import { WelcomeProductoComponent } from '../prueba/Welcome/Producto/welcome-producto/welcome-producto.component';
 import { MatOption } from '@angular/material/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { CommonModule } from '@angular/common';
+import { FacturaCompraComponent } from '../prueba/Welcome/FacturaCompra/factura-compra/factura-compra.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     WelcomeComponent,
     CategoriaComponent,
     WelcomeCategoriaComponent,
-    WelcomeProductoComponent
+    WelcomeProductoComponent,
+    FacturaCompraComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +61,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     MatInputModule,
     MatFormFieldModule,
     MatOption,
-    NgbModule
+    NgbModule,
+    CommonModule
   ],
   providers: [
     provideAnimationsAsync()

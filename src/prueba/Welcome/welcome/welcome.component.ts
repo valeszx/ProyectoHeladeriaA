@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { CardService } from '../../../servicios/card.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { FacturaCompraComponent } from '../FacturaCompra/factura-compra/factura-compra.component';
 
 export interface CartItem {
   id: number;
@@ -27,7 +29,7 @@ export class WelcomeComponent {
   cartTotal: number = 0;
   isCartVisible: boolean = false; // Para controlar la visibilidad del carrito
 
-  constructor(private cardService:CardService) { 
+  constructor(private cardService:CardService,private modalService: NgbModal) { 
 
     cardService.cardItem$.subscribe((resultado)=>{
       this.cartTotal = 0;
@@ -69,5 +71,31 @@ export class WelcomeComponent {
       this.cartItems.splice(index, 1);
       this.actualizarCarrito();
     }
+  }
+
+  checkout(){
+    // Obtiene los valores actuales del carrito de los Observables
+    // Usamos .pipe(take(1)) para obtener el valor actual y desuscribirnos inmediatamente
+    this.cardService.cardItem$.subscribe(items => {
+
+        // Abre el modal de la factura
+        const modalRef = this.modalService.open(FacturaCompraComponent, { centered: true });
+        
+        // Pasa los datos al componente del modal
+        modalRef.componentInstance.cartItems = items;
+        modalRef.componentInstance.cartTotal = this.cartTotal;
+
+        // Cuando el modal se cierre (ej: el usuario presiona "Aceptar")
+        modalRef.result.then((result) => {
+          if (result === 'Ok click') {
+            this.cardService.clearCart(); // Vacía el carrito
+            this.isCartVisible = false; // Opcional: cierra el desplegable del carrito
+          }
+        }, (reason) => {
+          console.log(`Modal dismiss: ${reason}`); // Si el modal se cierra sin acción (ej. escape)
+        });
+
+    }).unsubscribe(); // Desuscribe para evitar fugas de memoria
+  
   }
 }

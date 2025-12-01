@@ -21,6 +21,12 @@
         <div class="cart-total">
           Total: <span>{{cartTotal | number:'1.2-2'}}</span>
         </div>
+
+        <button class="btn btn-primary w-100 mt-2" 
+                (click)="checkout()" 
+                [disabled]="((cartItemCount) || 0) === 0">
+            Comprar
+        </button>
       </div>
     </div>
  
