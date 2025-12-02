@@ -48,7 +48,17 @@ export class CardService {
     this.item.next([]); // Emite una lista vacía
   }
 
+  removerDelCarro(itemToRemove: CartItem): void {
+    const currentItems = this.item.getValue();
+    
+    // Encuentra el índice del producto a remover (por ID o referencia)
+    const index = currentItems.findIndex(item => item.id === itemToRemove.id);
 
+    if (index > -1) {
+      currentItems.splice(index, 1); // Elimina 1 elemento en el índice
+      this.item.next([...currentItems]); // Emite la nueva lista
+    }
+  }
 
   constructor() { }
 }

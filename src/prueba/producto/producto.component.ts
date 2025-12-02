@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table'; // 👈 Clase para manejar datos
 import { MatPaginator } from '@angular/material/paginator';
 import { ProductoService } from '../../servicios/producto.service';
@@ -6,9 +6,10 @@ import { PermisoService } from '../../servicios/permiso.service';
 import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoriaService } from '../../servicios/categoria.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 export interface Producto {
-  id:number;
+  id: number;
   nombre: string;
   descripcion: string;
   cantidad: number;
@@ -18,7 +19,7 @@ export interface Producto {
 }
 
 export interface Categoria {
-  id:number;
+  id: number;
   nombre?: string;
 }
 
@@ -31,25 +32,28 @@ export interface Categoria {
 export class ProductoComponent {
   // La primera columna invisible para los puntos suspensivos (menú de acciones)
   SOLICITUDES_DATA: Producto[] = [];
-  displayedColumns: string[] = ['Nombre', 'Descripcion', 'Cantidad', 'Precio', 'Editar', 'Eliminar'];
+  displayedColumns: string[] = ['Nombre', 'Descripcion', 'Cantidad', 'Precio', 'Acciones'];
   PuedeVer: boolean = false;
   @Input() id!: string
   formulario!: FormGroup;
-  idProductoEditar:number =0;
+  idProductoEditar: number = 0;
   Modal: boolean = false;
   ModalEliminar: boolean = false;
   AddProducto!: Producto;
   titulo: string = 'Agregar Nuevo Producto'
   tituloEliminar: string = 'Eliminar Producto'
-  idProductoEliminar:number =0;
+  idProductoEliminar: number = 0;
   categorias: any[] = [];
 
   dataSource = new MatTableDataSource<Producto>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('productoModal') productoModalRef!: TemplateRef<any>;
+  @ViewChild('eliminarModal') eliminarModalRef!: TemplateRef<any>;
 
   constructor(private productoService: ProductoService, private permisoService: PermisoService,
-    private route: ActivatedRoute, private fg: FormBuilder,private categoriaService: CategoriaService
+    private route: ActivatedRoute, private fg: FormBuilder, private categoriaService: CategoriaService,
+    private modalService: NgbModal,
   ) {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
@@ -79,7 +83,7 @@ export class ProductoComponent {
           cantidad: item.cantidad,
           precio: item.precio,
           categoria: item.categorias,
-          idCategoria: item.categorias.length > 0 ?item.categorias[0].id:0
+          idCategoria: item.categorias.length > 0 ? item.categorias[0].id : 0
         }));
 
         this.SOLICITUDES_DATA = productos;
@@ -114,46 +118,47 @@ export class ProductoComponent {
 
     var forms = this.formulario.value;
 
-      this.AddProducto = {
-        id :0,
-        nombre: forms.nombre,
-        descripcion: forms.descripcion,
-        cantidad: forms.cantidad,
-        precio: forms.precio,
-        categorias :this.categorias.find(x=> x.id == forms.categoriaId)
-      };
+    this.AddProducto = {
+      id: 0,
+      nombre: forms.nombre,
+      descripcion: forms.descripcion,
+      cantidad: forms.cantidad,
+      precio: forms.precio,
+      categorias: this.categorias.find(x => x.id == forms.categoriaId)
+    };
 
-      console.log("addproducto",this.AddProducto);
 
     if (this.titulo == 'Agregar Nuevo Producto') {
-    
+
       this.productoService.AgregarProducto(this.AddProducto).subscribe({
         next: (data) => {
           if (data) {
-            this.Modal = false;
             this.limpiarFormulario();
             this.ngOnInit();
+            // 💡 Cierra el modal de forma programática
+            this.modalService.dismissAll();
           }
         }
       });
     }
-    else{
+    else {
 
       this.AddProducto = {
-        id :this.idProductoEditar,
+        id: this.idProductoEditar,
         nombre: forms.nombre,
         descripcion: forms.descripcion,
         cantidad: forms.cantidad,
         precio: forms.precio,
-        categorias :this.categorias.find(x=> x.id == forms.categoriaId)
+        categorias: this.categorias.find(x => x.id == forms.categoriaId)
       };
-      
+
       this.productoService.ActualizarProducto(this.AddProducto).subscribe({
         next: (data) => {
           if (data) {
-            this.Modal = false;
             this.limpiarFormulario();
             this.ngOnInit();
+            // 💡 Cierra el modal de forma programática
+            this.modalService.dismissAll();
           }
         }
       });
@@ -163,16 +168,16 @@ export class ProductoComponent {
 
   //boton agregar producto levanta el modal
   agregarProducto() {
-    this.Modal = true;
+    // 💡 Abrir el modal usando el servicio y la referencia al template
+    this.modalService.open(this.productoModalRef, { size: 'lg', centered: true });
     this.titulo = 'Agregar Nuevo Producto';
   }
 
   editarProducto(producto: any) {
-    this.Modal = true;
+    this.modalService.open(this.productoModalRef, { size: 'lg', centered: true });
     this.titulo = 'Editar producto';
 
     this.idProductoEditar = producto.id;
-    console.log(producto);
 
     this.formulario.patchValue({ 'nombre': producto.nombre })
     this.formulario.patchValue({ 'descripcion': producto.descripcion })
@@ -187,40 +192,42 @@ export class ProductoComponent {
     this.formulario.reset();
   }
 
-  eliminar(){
+  eliminar() {
     this.productoService.EliminarProducto(this.idProductoEliminar).subscribe({
-        next: (data) => {
-          if (data) {
-            this.ModalEliminar = false;
-            this.limpiarFormulario();
-            this.ngOnInit();
-          }
+      next: (data) => {
+        if (data) {
+          // 💡 Cierra el modal de forma programática
+          this.modalService.dismissAll();
+          this.limpiarFormulario();
+          this.ngOnInit();
         }
-      });
+      }
+    });
   }
 
-  EliminarProducto(producto: any){
+  EliminarProducto(producto: any) {
     this.idProductoEliminar = producto.id;
-    this.ModalEliminar = true;
+    this.modalService.open(this.eliminarModalRef, { size: 'lg', centered: true });
   }
 
-  CancelarEliminar(){
-    this.ModalEliminar = false;
+  CancelarEliminar() {
+    // 💡 Cierra el modal de forma programática
+    this.modalService.dismissAll();
   }
 
-  ObtenerCategorias(){
-     //Obtenemos los productos
-        this.categoriaService.ObtenerCategoria().subscribe({
-          next: (data) => {
-            console.log(data)
-            this.categorias = data.map((item: any) => ({
-              id: item.id,
-              nombre: item.nombre,
-              tipoCategoria: item.tipoCategoria
-            }));
-  
-          }
-        });
+  ObtenerCategorias() {
+    //Obtenemos los productos
+    this.categoriaService.ObtenerCategoria().subscribe({
+      next: (data) => {
+        console.log(data)
+        this.categorias = data.map((item: any) => ({
+          id: item.id,
+          nombre: item.nombre,
+          tipoCategoria: item.tipoCategoria
+        }));
+
+      }
+    });
   }
 
 }

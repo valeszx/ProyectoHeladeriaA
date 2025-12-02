@@ -29,29 +29,25 @@
         <ng-container matColumnDef="Imagen">
             <th mat-header-cell *matHeaderCellDef> Imagen </th>
             <td mat-cell *matCellDef="let element">
-                <img [src]="element.rutaImagen"  class="table-image">
+                <img [src]="element.rutaImagen" class="table-image">
             </td>
         </ng-container>
 
-        <!-- NUEVO: Editar -->
-        <ng-container matColumnDef="Editar">
-            <th mat-header-cell *matHeaderCellDef class="centered"> </th>
-            <td mat-cell *matCellDef="let element" class="centered">
-                <button mat-icon-button color="primary" aria-label="Editar producto" matTooltip="Editar"
-                    (click)='editarProducto(element)' *ngIf="PuedeVer">
-                    <mat-icon>edit</mat-icon>
-                </button>
-            </td>
-        </ng-container>
+         <ng-container matColumnDef="Acciones">
+            <th mat-header-cell *matHeaderCellDef class="centered"> Acciones </th>
+            <td mat-cell *matCellDef="let element" class="action-cell">
 
-        <!-- NUEVO: Eliminar -->
-        <ng-container matColumnDef="Eliminar">
-            <th mat-header-cell *matHeaderCellDef class="centered"> </th>
-            <td mat-cell *matCellDef="let element" class="centered">
-                <button mat-icon-button color="warn" aria-label="Eliminar producto" matTooltip="Eliminar"
-                    (click)="EliminarProducto(element)" *ngIf="PuedeVer">
-                    <mat-icon>delete</mat-icon>
-                </button>
+                <div class="action-buttons-group">
+                    <button mat-icon-button color="primary" aria-label="Editar producto" matTooltip="Editar"
+                        (click)='editarProducto(element)' *ngIf="PuedeVer">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+
+                    <button mat-icon-button color="warn" aria-label="Eliminar producto" matTooltip="Eliminar"
+                        (click)="EliminarProducto(element)" *ngIf="PuedeVer">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
             </td>
         </ng-container>
 
@@ -63,73 +59,69 @@
 
 <mat-paginator [pageSizeOptions]="[4, 10, 25]" showFirstLastButtons></mat-paginator>
 
-<div class="modal-overlay" (click)="cancelar()" *ngIf="Modal">
-    <div class="modal-dialog" (click)="$event.stopPropagation()">
-
-        <div class="modal-header">
-            <h2 class="modal-title">{{titulo}}</h2>
-        </div>
-
-        <div class="modal-content">
-            <form [formGroup]="formulario">
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" formControlName="nombre" required>
-                    <span class="error-msg"
-                        *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">El nombre es
-                        obligatorio.</span>
-                </div>
-
-                <div class="form-group">
-                    <label>Tipo Categoria</label>
-                    <input type="text" formControlName="tipoCategoria" required>
-                    <span class="error-msg"
-                        *ngIf="formulario.get('tipoCategoria')?.invalid && formulario.get('tipoCategoria')?.touched">El
-                        tipo de categoria es
-                        obligatorio.</span>
-                </div>
-
-                <div class="form-group">
-                    <label>Imagen</label>
-                    <input type="file" #fileInput hidden (change)="onFileSelected($event)">
-
-                    <button mat-flat-button color="accent" type="button" (click)="fileInput.click()">
-                        Seleccionar Imagen
-                    </button>
-                </div>
-
-                <div class="form-group image-preview-container" *ngIf="imagePreview">
-                    <label>Previsualización</label>
-                    <img [src]="imagePreview" alt="Previsualización de la imagen" class="image-preview">
-                </div>
-
-
-            </form>
-        </div>
-
-        <div class="modal-actions">
-            <button class="btn btn-secondary" (click)="cancelar()">Cancelar</button>
-            <button class="btn btn-primary" [disabled]="formulario.invalid" (click)="guardar()">Agregar</button>
-        </div>
-
+<ng-template #categoriaModal let-modal>
+    <div class="modal-header">
+        <h2 class="modal-title">{{titulo}}</h2>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cancel click')"></button>
     </div>
-</div>
 
-<div class="modal-overlay" (click)="cancelar()" *ngIf="ModalEliminar">
-    <div class="modal-dialog" (click)="$event.stopPropagation()">
+    <div class="modal-content">
+        <form [formGroup]="formulario">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input type="text" formControlName="nombre" required>
+                <span class="error-msg"
+                    *ngIf="formulario.get('nombre')?.invalid && formulario.get('nombre')?.touched">El nombre es
+                     obligatorio.</span>
+               
+            </div>
 
-        <div class="modal-header">
-            <h2 class="modal-title">{{tituloEliminar}}</h2>
-        </div>
+             <div class="form-group">
+                <label>Tipo Categoria</label>
+                 <input type="text" formControlName="tipoCategoria" required>
+                 <span class="error-msg" 
+                    *ngIf="formulario.get('tipoCategoria')?.invalid && formulario.get('tipoCategoria')?.touched">El
+                    tipo de categoria es obligatorio.</span>
+                </div>
 
-        <div class="modal-content">
-            <p>¿Desea eliminar la categoria?</p>
-        </div>
+            <div class="form-group">
+                <label>Imagen</label>
+                 <input type="file" #fileInput hidden (change)="onFileSelected($event)">
+               <button mat-flat-button color="accent" type="button" (click)="fileInput.click()">
+                    Seleccionar Imagen
+                   </button>
+               </div>
 
-        <div class="modal-actions">
-            <button class="btn btn-secondary" (click)="CancelarEliminar()">Cancelar</button>
-            <button class="btn btn-danger" (click)="eliminar()">Aceptar</button>
-        </div>
-
+              <div class="form-group image-preview-container" *ngIf="imagePreview">
+              <label>Previsualización</label>
+                <img [src]="imagePreview" alt="Previsualización de la imagen" class="image-preview">
+                </div>
+           
+        </form>
+       
     </div>
-</div>
+
+    <div class="modal-actions">
+       <button class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancelar</button>
+        <button class="btn btn-primary" [disabled]="formulario.invalid"
+            (click)="guardar()">Guardar</button>
+        </div>
+</ng-template>
+
+
+<ng-template #eliminarModal let-modal>
+    <div class="modal-header">
+        <h2 class="modal-title">{{tituloEliminar}}</h2>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cancel click')"></button>
+        
+    </div>
+
+    <div class="modal-content">
+        <p>¿Desea eliminar la categoria?</p>
+        </div>
+
+    <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="modal.dismiss('Cancel click')">Cancelar</button>
+         <button class="btn btn-danger" (click)="eliminar()">Aceptar</button>
+        </div>
+</ng-template>

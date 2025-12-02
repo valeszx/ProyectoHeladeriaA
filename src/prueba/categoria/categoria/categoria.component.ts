@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, TemplateRef, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table'; // 👈 Clase para manejar datos
 import { MatPaginator } from '@angular/material/paginator';
 import { ActivatedRoute } from '@angular/router';
@@ -7,6 +7,7 @@ import { Producto } from '../../producto/producto.component';
 import { ProductoService } from '../../../servicios/producto.service';
 import { PermisoService } from '../../../servicios/permiso.service';
 import { CategoriaService } from '../../../servicios/categoria.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 
 export interface Categoria {
@@ -24,7 +25,7 @@ export interface Categoria {
 export class CategoriaComponent {
   // La primera columna invisible para los puntos suspensivos (menú de acciones)
   SOLICITUDES_DATA: Categoria[] = [];
-  displayedColumns: string[] = ['Nombre', 'TipoCategoria', 'Imagen', 'Editar', 'Eliminar'];
+  displayedColumns: string[] = ['Nombre', 'TipoCategoria', 'Imagen', 'Acciones'];
   PuedeVer: boolean = false;
   @Input() id!: string
   formulario!: FormGroup;
@@ -39,13 +40,17 @@ export class CategoriaComponent {
   selectedFile: File | null = null;
   imagePreview: string | ArrayBuffer | null = null;
   private readonly API_URL_BASE = 'https://localhost:7191';
+  // 1. Referencias a los templates del HTML
+  @ViewChild('categoriaModal') categoriaModalRef!: TemplateRef<any>;
+  @ViewChild('eliminarModal') eliminarModalRef!: TemplateRef<any>;
 
   dataSource = new MatTableDataSource<Categoria>();
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private categoriaService: CategoriaService, private permisoService: PermisoService,
-    private route: ActivatedRoute, private fg: FormBuilder
+    private route: ActivatedRoute, private fg: FormBuilder,
+    private modalService: NgbModal
   ) {
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id')!;
@@ -126,7 +131,8 @@ export class CategoriaComponent {
       this.categoriaService.AgregarCategoria(formData).subscribe({
         next: (data) => {
           if (data) {
-            this.Modal = false;
+            //Cierra el modal de forma programática
+            this.modalService.dismissAll();
             this.limpiarFormulario();
             this.ngOnInit();
           }
@@ -142,7 +148,8 @@ export class CategoriaComponent {
       this.categoriaService.ActualizarCategoria(formData).subscribe({
         next: (data) => {
           if (data) {
-            this.Modal = false;
+            //Cierra el modal de forma programática
+            this.modalService.dismissAll();
             this.limpiarFormulario();
             this.ngOnInit();
           }
@@ -154,13 +161,14 @@ export class CategoriaComponent {
 
   //boton agregar producto levanta el modal
   agregarProducto() {
-    this.Modal = true;
+    // Abrir el modal usando el servicio y la referencia al template
+    this.modalService.open(this.categoriaModalRef, { size: 'md', centered: true });
     this.titulo = 'Agregar Nueva Categoria';
   }
 
   //boton editar producto levanta el modal con los datos cargados
   editarProducto(categoria: any) {
-    this.Modal = true;
+    this.modalService.open(this.categoriaModalRef, { size: 'md', centered: true });
     this.titulo = 'Editar categoria';
 
     this.idCategoriaEditar = categoria.id;
@@ -170,14 +178,14 @@ export class CategoriaComponent {
 
     // 2. Manejar la imagen existente (la ruta)
     // Limpiamos cualquier archivo que se haya seleccionado antes.
-    this.selectedFile = null; 
+    this.selectedFile = null;
     // Verificamos si la categoría tiene una ruta de imagen guardada en la BD.
     if (categoria.rutaImagen) {
-        // Concatena la URL base para crear la URL completa que el navegador puede cargar
-        this.imagePreview = `${categoria.rutaImagen}`;
+      // Concatena la URL base para crear la URL completa que el navegador puede cargar
+      this.imagePreview = `${categoria.rutaImagen}`;
     } else {
-        // Si no hay imagen guardada, limpiamos la previsualización.
-        this.imagePreview = null;
+      // Si no hay imagen guardada, limpiamos la previsualización.
+      this.imagePreview = null;
     }
   }
 
@@ -191,7 +199,8 @@ export class CategoriaComponent {
     this.categoriaService.EliminarCategoria(this.idProductoEliminar).subscribe({
       next: (data) => {
         if (data) {
-          this.ModalEliminar = false;
+          //Cierra el modal de forma programática
+          this.modalService.dismissAll();
           this.limpiarFormulario();
           this.ngOnInit();
         }
@@ -202,12 +211,13 @@ export class CategoriaComponent {
   //boton eliminar producto levanta el modal eliminar
   EliminarProducto(producto: any) {
     this.idProductoEliminar = producto.id;
-    this.ModalEliminar = true;
+    this.modalService.open(this.eliminarModalRef, { size: 'md', centered: true });
   }
 
   //Boton cancelar del modal eliminar
   CancelarEliminar() {
-    this.ModalEliminar = false;
+    //Cierra el modal de forma programática
+    this.modalService.dismissAll();
   }
 
   ObtenerCategorias() {

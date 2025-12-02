@@ -1,5 +1,5 @@
 <div class="menu-background">
-  
+
   <div class="header-logo">
     <img src="assets/Imagenes/IceCream.png" alt="Logo Heladería" class="logo-img">
     <h2 class="brand-subtitle">Bienvenidos a la heladeria Maria Auxiliadora</h2>
@@ -7,29 +7,34 @@
   </div>
 
   <!-- Carrito de compras -->
-    <div class="cart-container" (click)="toggleCart()">
-      <div class="cart-icon">
-        <img src="assets/Imagenes/Carrito.png" alt="Carrito">
-        <span class="cart-count">{{cartItemCount}}</span>
-      </div>
-      <div class="cart-details" *ngIf="isCartVisible">
-        <ul class="cart-items">
-          <li *ngFor="let item of cartItems">
-            {{item.nombre}} - ${{item.precio | number:'1.2-2'}} - {{item.cantidad}}
-          </li>
-        </ul>
-        <div class="cart-total">
-          Total: <span>{{cartTotal | number:'1.2-2'}}</span>
-        </div>
-
-        <button class="btn btn-primary w-100 mt-2" 
-                (click)="checkout()" 
-                [disabled]="((cartItemCount) || 0) === 0">
-            Comprar
-        </button>
-      </div>
+  <div class="cart-container" (click)="toggleCart()">
+    <div class="cart-icon">
+      <img src="assets/Imagenes/Carrito.png" alt="Carrito">
+      <span class="cart-count">{{cartItemCount}}</span>
     </div>
- 
+    <div class="cart-details" *ngIf="isCartVisible">
+      <ul class="cart-items">
+        <li *ngFor="let item of cartItems">
+          <div class="item-info">
+            {{item.nombre}} - ${{item.precio | number:'1.2-2'}} - {{item.cantidad}}
+          </div>
+
+
+          <button mat-icon-button color="warn" class="remove-btn" (click)="removerItemCarrito(item); $event.stopPropagation()">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </li>
+      </ul>
+      <div class="cart-total">
+        Total: <span>{{cartTotal | number:'1.2-2'}}</span>
+      </div>
+
+      <button class="btn btn-primary w-100 mt-2" (click)="checkout()" [disabled]="((cartItemCount) || 0) === 0">
+        Comprar
+      </button>
+    </div>
+  </div>
+
 
   <router-outlet></router-outlet>
 </div>

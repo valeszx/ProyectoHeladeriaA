@@ -17,8 +17,8 @@ export interface CartItem {
   styleUrl: './welcome.component.scss'
 })
 export class WelcomeComponent {
-  
-// Esta lista simula tu base de datos. 
+
+  // Esta lista simula tu base de datos. 
 
 
   // El carrito será un array de productos
@@ -29,16 +29,16 @@ export class WelcomeComponent {
   cartTotal: number = 0;
   isCartVisible: boolean = false; // Para controlar la visibilidad del carrito
 
-  constructor(private cardService:CardService,private modalService: NgbModal) { 
+  constructor(private cardService: CardService, private modalService: NgbModal) {
 
-    cardService.cardItem$.subscribe((resultado)=>{
+    cardService.cardItem$.subscribe((resultado) => {
       this.cartTotal = 0;
       this.cartItems = resultado;
       this.cartItemCount = this.cartItems.length;
 
-      this.cartItems.map((x)=> {
+      this.cartItems.map((x) => {
         let total = (x.cantidad * x.precio)
-        this.cartTotal = this.cartTotal +  total
+        this.cartTotal = this.cartTotal + total
       })
     })
   }
@@ -64,7 +64,7 @@ export class WelcomeComponent {
     this.isCartVisible = !this.isCartVisible;
   }
 
-    // Método para eliminar un producto del carrito (opcional)
+  // Método para eliminar un producto del carrito (opcional)
   eliminarDelCarrito(producto: CartItem): void {
     const index = this.cartItems.indexOf(producto);
     if (index > -1) {
@@ -73,29 +73,35 @@ export class WelcomeComponent {
     }
   }
 
-  checkout(){
+  checkout() {
     // Obtiene los valores actuales del carrito de los Observables
     // Usamos .pipe(take(1)) para obtener el valor actual y desuscribirnos inmediatamente
     this.cardService.cardItem$.subscribe(items => {
 
-        // Abre el modal de la factura
-        const modalRef = this.modalService.open(FacturaCompraComponent, { centered: true });
-        
-        // Pasa los datos al componente del modal
-        modalRef.componentInstance.cartItems = items;
-        modalRef.componentInstance.cartTotal = this.cartTotal;
+      // Abre el modal de la factura
+      const modalRef = this.modalService.open(FacturaCompraComponent, { centered: true });
 
-        // Cuando el modal se cierre (ej: el usuario presiona "Aceptar")
-        modalRef.result.then((result) => {
-          if (result === 'Ok click') {
-            this.cardService.clearCart(); // Vacía el carrito
-            this.isCartVisible = false; // Opcional: cierra el desplegable del carrito
-          }
-        }, (reason) => {
-          console.log(`Modal dismiss: ${reason}`); // Si el modal se cierra sin acción (ej. escape)
-        });
+      // Pasa los datos al componente del modal
+      modalRef.componentInstance.cartItems = items;
+      modalRef.componentInstance.cartTotal = this.cartTotal;
+
+      // Cuando el modal se cierre (ej: el usuario presiona "Aceptar")
+      modalRef.result.then((result) => {
+        if (result === 'Ok click') {
+          this.cardService.clearCart(); // Vacía el carrito
+          this.isCartVisible = false; // Opcional: cierra el desplegable del carrito
+        }
+      }, (reason) => {
+        console.log(`Modal dismiss: ${reason}`); // Si el modal se cierra sin acción (ej. escape)
+      });
 
     }).unsubscribe(); // Desuscribe para evitar fugas de memoria
-  
+
+  }
+
+  //Remove item del carrito
+  removerItemCarrito(item: CartItem): void {
+    
+    this.cardService.removerDelCarro(item);
   }
 }
