@@ -21,19 +21,19 @@
             <tr *ngFor="let item of cartItems">
                 <td>{{item.cantidad}}</td>
                 <td ass="text-break">{{item.nombre}}</td>
-                <td class="text-end">${{item.precio | number:'1.2-2'}}</td>
-                <td class="text-end">${{item.subtotal | number:'1.2-2'}}</td>
+                <td class="text-end">{{item.precio | currency:'NIO':'symbol-narrow':'1.0-0'}}</td>
+                <td class="text-end">{{item.subtotal | currency:'NIO':'symbol-narrow':'1.0-0'}}</td>
             </tr>
         </tbody>
         <tfoot>
             <tr>
                 <td colspan="3" class="text-end fw-bold">Subtotal:</td>
-                <td class="text-end fw-bold">${{ cartTotal | number:'1.2-2'}}</td>
+                <td class="text-end fw-bold">{{ cartTotal | currency:'NIO':'symbol-narrow':'1.0-0'}}</td>
             </tr>
 
             <tr class="table-total">
                 <td colspan="3" class="text-end fw-bold">Total a pagar:</td>
-                <td class="text-end fw-bold">${{ cartTotal | number:'1.2-2'}}</td>
+                <td class="text-end fw-bold">{{ cartTotal | currency:'NIO':'symbol-narrow':'1.0-0'}}</td>
             </tr>
         </tfoot>
     </table>
