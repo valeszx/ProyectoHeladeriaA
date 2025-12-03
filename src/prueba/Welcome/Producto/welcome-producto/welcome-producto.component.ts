@@ -11,6 +11,7 @@ interface Producto {
   precio: number;
   descripcion: string;
   imagen: string;
+  cantidad: number;
   idCategoria: number;
 }
 
@@ -41,6 +42,7 @@ export class WelcomeProductoComponent {
     this.productoService.ObtenerProductos().subscribe({
       next: (data) => {
         this.productos = data.map((item: any) => ({
+        
           id: item.id,
           nombre: item.nombre,
           descripcion: item.descripcion,
@@ -51,7 +53,7 @@ export class WelcomeProductoComponent {
         }));
 
       //Filtramos los productos por la categoria seleccionada.
-       this.productos = this.productos.filter(x=> x.idCategoria == parseInt(this.idCategoria))!
+       this.productos = this.productos.filter(x=> x.idCategoria == parseInt(this.idCategoria) && x.cantidad > 0)
 
       }
     });
